@@ -3,7 +3,7 @@ using Bmb.Domain.Core.Interfaces;
 using Bmb.Domain.Core.ValueObjects;
 using Bmb.Orders.Gateway;
 
-namespace Bmb.Payment.Application.UseCases.Payment;
+namespace Bmb.Payment.Application.UseCases;
 
 public class CreatePaymentUseCase : ICreatePaymentUseCase
 {

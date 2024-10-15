@@ -1,6 +1,6 @@
 using Bmb.Domain.Core.ValueObjects;
 
-namespace Bmb.Payment.Application.UseCases.Payment;
+namespace Bmb.Payment.Application.UseCases;
 
 public interface IUpdatePaymentStatusUseCase
 {

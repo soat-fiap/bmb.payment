@@ -13,10 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="FIAP.TechChallenge.ByteMeBurger.Controllers.Test" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Bmb.Domain.Core" Version="0.0.1" />
     </ItemGroup>
 

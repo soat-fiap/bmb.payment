@@ -1,6 +1,6 @@
 using Bmb.Domain.Core.Interfaces;
 using Bmb.Domain.Core.ValueObjects;
-using Bmb.Payment.Application.UseCases.Payment;
+using Bmb.Payment.Application.UseCases;
 using Bmb.Payment.Controllers.Contracts;
 using Bmb.Payment.Controllers.Dto;
 

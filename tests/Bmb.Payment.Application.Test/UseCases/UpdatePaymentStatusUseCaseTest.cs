@@ -1,22 +1,21 @@
 using AutoFixture;
-using FIAP.TechChallenge.ByteMeBurger.Application.UseCases.Orders;
-using FIAP.TechChallenge.ByteMeBurger.Application.UseCases.Payment;
 using Bmb.Domain.Core.Interfaces;
+using Bmb.Payment.Application.UseCases;
 
-namespace FIAP.TechChallenge.ByteMeBurger.Application.Test.UseCases.Payment;
+namespace Bmb.Payment.Application.Test.UseCases;
 
 [TestSubject(typeof(UpdatePaymentStatusUseCase))]
 public class UpdatePaymentStatusUseCaseTest
 {
-    private readonly Mock<IUpdateOrderStatusUseCase> _mockUpdateOrderStatusUseCase;
+    // private readonly Mock<IUpdateOrderStatusUseCase> _mockUpdateOrderStatusUseCase;
     private readonly Mock<IPaymentRepository> _mockPaymentRepository;
     private readonly UpdatePaymentStatusUseCase _target;
 
     public UpdatePaymentStatusUseCaseTest()
     {
-        _mockUpdateOrderStatusUseCase = new Mock<IUpdateOrderStatusUseCase>();
+        // _mockUpdateOrderStatusUseCase = new Mock<IUpdateOrderStatusUseCase>();
         _mockPaymentRepository = new Mock<IPaymentRepository>();
-        _target = new UpdatePaymentStatusUseCase(_mockUpdateOrderStatusUseCase.Object, _mockPaymentRepository.Object);
+        _target = new UpdatePaymentStatusUseCase(_mockPaymentRepository.Object);
     }
 
     [Fact]
@@ -38,8 +37,8 @@ public class UpdatePaymentStatusUseCaseTest
         using (new AssertionScope())
         {
             result.Should().BeTrue();
-            _mockUpdateOrderStatusUseCase.Verify(uc => uc.Execute(It.IsAny<Guid>(), It.IsAny<OrderStatus>()),
-                Times.Once);
+            // _mockUpdateOrderStatusUseCase.Verify(uc => uc.Execute(It.IsAny<Guid>(), It.IsAny<OrderStatus>()),
+            //     Times.Once);
         }
     }
 }

@@ -1,5 +1,5 @@
-using FIAP.TechChallenge.ByteMeBurger.MercadoPago.Gateway.Configuration;
-using FIAP.TechChallenge.ByteMeBurger.MercadoPago.Gateway.Security;
+using Bmb.Payment.MercadoPago.Gateway.Configuration;
+using Bmb.Payment.MercadoPago.Gateway.Security;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using JetBrains.Annotations;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Primitives;
 
-namespace FIAP.TechChallenge.ByteMeBurger.MercadoPago.Gateway.Test.Security;
+namespace Bmb.Payment.MercadoPago.Gateway.Test.Security;
 
 [TestSubject(typeof(MercadoPagoHmacSignatureValidator))]
 public class MercadoPagoHmacSignatureValidatorTest

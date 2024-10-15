@@ -1,10 +1,10 @@
 using AutoFixture;
-using FIAP.TechChallenge.ByteMeBurger.Application.UseCases.Orders;
-using FIAP.TechChallenge.ByteMeBurger.Application.UseCases.Payment;
 using Bmb.Domain.Core.Base;
 using Bmb.Domain.Core.Interfaces;
+using Bmb.Orders.Gateway;
+using Bmb.Payment.Application.UseCases;
 
-namespace FIAP.TechChallenge.ByteMeBurger.Application.Test.UseCases.Payments;
+namespace Bmb.Payment.Application.Test.UseCases;
 
 [TestSubject(typeof(CreatePaymentUseCase))]
 public class CreatePaymentUseCaseTest
@@ -13,14 +13,14 @@ public class CreatePaymentUseCaseTest
 
     private readonly CreatePaymentUseCase _createPaymentUseCase;
 
-    private readonly Mock<IGetOrderDetailsUseCase> _getOrderDetailsUseCase;
+    private readonly Mock<IOrdersGateway> _ordersGateway;
 
     public CreatePaymentUseCaseTest()
     {
         _paymentGatewayMock = new Mock<IPaymentGateway>();
         Mock<IPaymentGatewayFactoryMethod> paymentGatewayFactory = new();
-        _getOrderDetailsUseCase = new Mock<IGetOrderDetailsUseCase>();
-        _createPaymentUseCase = new CreatePaymentUseCase(paymentGatewayFactory.Object, _getOrderDetailsUseCase.Object);
+        _ordersGateway = new Mock<IOrdersGateway>();
+        _createPaymentUseCase = new CreatePaymentUseCase(paymentGatewayFactory.Object, _ordersGateway.Object);
 
         paymentGatewayFactory.Setup(g => g.Create(It.IsAny<PaymentType>()))
             .Returns(_paymentGatewayMock.Object);
@@ -40,7 +40,7 @@ public class CreatePaymentUseCaseTest
             .With(p => p.Status, PaymentStatus.Pending)
             .Create();
 
-        _getOrderDetailsUseCase.Setup(o => o.Execute(It.IsAny<Guid>()))
+        _ordersGateway.Setup(o => o.GetAsync(It.IsAny<Guid>()))
             .ReturnsAsync(order);
         _paymentGatewayMock.Setup(ps => ps.CreatePaymentAsync(It.IsAny<Order>()))
             .ReturnsAsync(expectedPayment);
@@ -59,7 +59,7 @@ public class CreatePaymentUseCaseTest
     public async Task Execute_OrderNotFound_ShouldThrowDomainException()
     {
         // Arrange
-        _getOrderDetailsUseCase.Setup(o => o.Execute(It.IsAny<Guid>()))
+        _ordersGateway.Setup(o => o.GetAsync(It.IsAny<Guid>()))
             .ReturnsAsync((Order?)default);
 
         // Act
@@ -77,7 +77,7 @@ public class CreatePaymentUseCaseTest
     public async Task Execute_OrderAlreadyHasPayment_ShouldThrowDomainException()
     {
         // Arrange
-        _getOrderDetailsUseCase.Setup(o => o.Execute(It.IsAny<Guid>()))
+        _ordersGateway.Setup(o => o.GetAsync(It.IsAny<Guid>()))
             .ReturnsAsync(new Order
             {
                 PaymentId = new PaymentId(Guid.NewGuid())
