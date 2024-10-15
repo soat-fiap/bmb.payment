@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Bmb.Payment.Application\Bmb.Payment.Application.csproj" />
+      <ProjectReference Include="..\Bmb.Payment.FakePayment.Gateway\Bmb.Payment.FakePayment.Gateway.csproj" />
+      <ProjectReference Include="..\Bmb.Payment.MercadoPago.Gateway\Bmb.Payment.MercadoPago.Gateway.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="FIAP.TechChallenge.ByteMeBurger.Controllers.Test" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Bmb.Domain.Core" Version="0.0.1" />
+    </ItemGroup>
+
+</Project>

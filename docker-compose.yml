@@ -1,0 +1,75 @@
+﻿services:
+  api:
+    depends_on:
+      - database
+    container_name: payment_api
+    build:
+      context: ./
+      dockerfile: src/Bmb.Payment.Api/Dockerfile
+      tags:
+        - techchallenge/restaurant_api
+    restart: always
+    healthcheck:
+      test: curl --fail http://localhost:8080/health || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 5s
+    networks:
+      - tech-challenge
+    ports:
+      - 8080:8080
+    environment:
+      - ConnectionStrings__MySql=Server=database;Database=${MYSQL_DATABASE};Uid=${MYSQL_USERID};Pwd=${MYSQL_PASSWORD};Port=${MYSQL_PORT}
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Serilog__WriteTo__2__Args__serverUrl=http://seq:5341
+      - Serilog__Enrich__0=FromLogContext
+      - MercadoPago__WebhookSecret=${MercadoPago_WebhookSecret}
+      - MercadoPago__AccessToken=${MercadoPago_AccessToken}
+      - MercadoPago__NotificationUrl=${MercadoPago_NotificationUrl}
+      - HybridCache__Expiration=${HybridCache_Expiration}
+      - HybridCache__LocalCacheExpiration=${HybridCache_LocalCacheExpiration}
+      - HybridCache__Flags=${HybridCache_Flags}
+      - JwtOptions__SigningKey=${JwtOptions_SigningKey}
+      - JwtOptions__Issuer=${JwtOptions_Issuer}
+      - JwtOptions__Audience=${JwtOptions_Audience}
+      - JwtOptions__ExpirationSeconds=${JwtOptions_ExpirationSeconds}
+      - JwtOptions__UseAccessToken=${JwtOptions_UseAccessToken}
+  database:
+    container_name: restaurant_db
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+      tags:
+        - techchallenge/restaurant_db
+    restart: always
+    environment:
+    - MYSQL_ROOT_PASSWORD=admin
+    - MYSQL_DATABASE=${MYSQL_DATABASE}
+    - MYSQL_USER=${MYSQL_USERID}
+    - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - 3306:3306
+    networks:
+      - tech-challenge
+
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - 27017:27017
+
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 8081:80
+    networks:
+      - tech-challenge
+
+networks:
+  tech-challenge:
+    driver: bridge
