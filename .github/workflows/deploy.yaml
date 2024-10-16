@@ -1,7 +1,8 @@
 name: Build and Deploy
 
 on:
-  create:
+  release:
+    types: [published]
     
 env:
   REGISTRY: ghcr.io
@@ -9,8 +10,7 @@ env:
  
 jobs:
   build-docker-image:
-    if: false
-    name: Create Docker image - ${{ github.ref }}
+    name: Create Docker image - ${{ github.event.release.tag_name }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,6 +20,12 @@ jobs:
       API_IMAGE_TAG: ${{ fromJson(steps.meta.outputs.json).tags[0] }}
 
     steps:
+      - name: Extract version
+        id: extract-version
+        run: | 
+          echo ${{ github.event.release.tag_name#v }}
+          echo "version=${{ github.event.release.tag_name#v }}" >> $GITHUB_OUTPUT
+      
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -40,7 +46,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: latest=true
           tags: |
-            type=semver,pattern={{version}}
+            type=raw,value=${{ steps.extract-version.outputs.version }}
 
       - name: Build and push Docker image
         id: build-and-push
