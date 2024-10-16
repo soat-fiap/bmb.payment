@@ -124,7 +124,8 @@ jobs:
         id: sanitize-version
         run: |
           echo ${{ needs.semantic-release.outputs.version }}
-          echo "version=${{ needs.semantic-release.outputs.version#v }}" >> $GITHUB_OUTPUT
+          TAG=${{ needs.semantic-release.outputs.version }}
+          echo "version=${TAG#v}" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
         uses: actions/checkout@v4
