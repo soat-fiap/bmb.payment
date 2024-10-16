@@ -1,0 +1,4 @@
+{
+  "branches": ["main", "config_release"],
+  "tagFormat": "v${version}"
+}
