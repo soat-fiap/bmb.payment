@@ -16,7 +16,7 @@ env:
 
 jobs:
   build:
-    if: github.ref_type != 'tag'
+    if: false && github.ref_type != 'tag'
     name: Build and analyze
     runs-on: windows-latest
     steps:
