@@ -7,8 +7,6 @@ on:
     paths-ignore:
       - 'README.md'
       - '.gitignore'
-    tags-ignore:
-      - '*'
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -49,7 +47,7 @@ jobs:
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       
       - name: Install dotnet-coverage
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        # if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         run: |
           dotnet tool install --global dotnet-coverage
 
@@ -63,35 +61,3 @@ jobs:
           dotnet build --no-incremental
           dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
-  semantic-release:
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    name: Release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "lts/*"
-
-      - name: Install dependencies
-        run: npm clean-install
-     
-      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
-        run: npm audit signatures
-     
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
