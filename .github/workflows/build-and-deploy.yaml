@@ -16,7 +16,6 @@ env:
 
 jobs:
   sonarcloud:
-    if: false
     name: Build and analyze
     runs-on: windows-latest
     steps:
