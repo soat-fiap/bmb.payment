@@ -1,12 +1,14 @@
-name: SonarCloud
+name: Test and analyze
+
 on:
   push:
     branches:
       - main
-      - semantic-release-plugins
     paths-ignore:
       - 'README.md'
       - '.gitignore'
+    tags-ignore:
+      - '*'
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -63,8 +65,8 @@ jobs:
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
   semantic-release:
-    # needs: build
-    # if: github.ref == 'refs/heads/main'
+    needs: build
+    if: github.ref == 'refs/heads/main'
     name: Release
     runs-on: ubuntu-latest
     permissions:
