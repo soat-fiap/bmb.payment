@@ -1,13 +1,18 @@
 {
-  "branches": ["main", "semantic-release-plugins"],
+  "branches": [
+    "main",
+    "semantic-release-plugins"
+  ],
   "tagFormat": "v${version}",
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     "@semantic-release/github",
-    "@semantic-release/exec",
-    {
-      "successCmd": "echo v${nextRelease.version} > VERSION"
-    }
+    [
+      "@semantic-release/exec",
+      {
+        "verifyReleaseCmd": "echo v${nextRelease.version} > VERSION"
+      }
+    ]
   ]
 }
