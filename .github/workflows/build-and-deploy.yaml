@@ -109,7 +109,7 @@ jobs:
   build-docker-image:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: semantic-release
-    name: Create Docker image ${{ needs.semantic-release.outputs.version }}
+    name: Create Docker image 
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -119,6 +119,9 @@ jobs:
       API_IMAGE_TAG: ${{ fromJson(steps.meta.outputs.json).tags[0] }}
 
     steps:
+      - name: Extract version
+        run: echo ${{ needs.semantic-release.outputs.version }}
+        
       - name: Checkout repository
         uses: actions/checkout@v4
 
