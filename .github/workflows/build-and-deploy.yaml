@@ -15,7 +15,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}/api
 
 jobs:
-  build:
+  sonarcloud:
     if: false
     name: Build and analyze
     runs-on: windows-latest
@@ -98,7 +98,6 @@ jobs:
       
       - name: Release
         id: semantic-release
-        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: | 
