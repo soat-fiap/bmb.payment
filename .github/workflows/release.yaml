@@ -3,7 +3,7 @@ name: Semantic release
 on:
   push:
     branches:
-      - main
+      - main2
     tags-ignore:
       - '*'
 jobs:
