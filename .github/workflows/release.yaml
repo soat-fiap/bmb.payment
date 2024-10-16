@@ -8,7 +8,7 @@ on:
       - '*'
 jobs:
   semantic-release:
-    if: github.ref == 'refs/heads/main'
+    if: false
     name: Create Semantic Release
     runs-on: ubuntu-latest
     permissions:
