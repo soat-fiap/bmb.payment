@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Bmb.Payment.Api.Auth;
 
 /// <summary>
@@ -8,6 +10,7 @@ namespace Bmb.Payment.Api.Auth;
 /// <param name="SigningKey">Signing key secret</param>
 /// <param name="ExpirationSeconds">Expiration in seconds</param>
 /// <param name="UseAccessToken">Flag to use AccessCode header instead of normal Authorization header.</param>
+[ExcludeFromCodeCoverage]
 public record JwtOptions(
     string Issuer,
     string Audience,

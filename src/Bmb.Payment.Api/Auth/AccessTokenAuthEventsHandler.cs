@@ -14,9 +14,9 @@ internal class AccessTokenAuthEventsHandler : JwtBearerEvents
     /// <summary>
     /// Gets single available instance of <see cref="AccessTokenAuthEventsHandler"/>
     /// </summary>
-    public static AccessTokenAuthEventsHandler Instance { get; } = new AccessTokenAuthEventsHandler();
+    public static AccessTokenAuthEventsHandler Instance { get; } = new ();
 
-    private Task MessageReceivedHandler(MessageReceivedContext context)
+    internal Task MessageReceivedHandler(MessageReceivedContext context)
     {
         if (context.Request.Headers.TryGetValue("AccessToken", out var headerValue) &&
             !string.IsNullOrWhiteSpace(headerValue))

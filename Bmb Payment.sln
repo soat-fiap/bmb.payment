@@ -34,6 +34,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.MercadoPago.Gat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Api.Test", "tests\Bmb.Payment.Api.Test\Bmb.Payment.Api.Test.csproj", "{2FED5604-88C7-421A-9864-824C661B933F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Orders.Gateway.Test", "tests\Bmb.Orders.Gateway.Test\Bmb.Orders.Gateway.Test.csproj", "{3220452F-8B8D-476C-962F-CAE2A2D76F44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.MySql.Test", "tests\Bmb.Payment.MySql.Test\Bmb.Payment.MySql.Test.csproj", "{C5464D10-B602-4B01-A14C-560536BB9563}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,8 @@ Global
 		{D7F3F320-0376-42C7-AFAE-5AB4893D2543} = {C5B37434-5A38-4BCB-8432-A7A4F7DFE6FB}
 		{BF3991A0-37A6-4DAD-81A0-34E220D4DFC1} = {C5B37434-5A38-4BCB-8432-A7A4F7DFE6FB}
 		{2FED5604-88C7-421A-9864-824C661B933F} = {C5B37434-5A38-4BCB-8432-A7A4F7DFE6FB}
+		{3220452F-8B8D-476C-962F-CAE2A2D76F44} = {C5B37434-5A38-4BCB-8432-A7A4F7DFE6FB}
+		{C5464D10-B602-4B01-A14C-560536BB9563} = {C5B37434-5A38-4BCB-8432-A7A4F7DFE6FB}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{819E90CE-033E-4DC3-B0E5-8358B2D6A0B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -105,5 +111,13 @@ Global
 		{2FED5604-88C7-421A-9864-824C661B933F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FED5604-88C7-421A-9864-824C661B933F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FED5604-88C7-421A-9864-824C661B933F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3220452F-8B8D-476C-962F-CAE2A2D76F44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3220452F-8B8D-476C-962F-CAE2A2D76F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3220452F-8B8D-476C-962F-CAE2A2D76F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3220452F-8B8D-476C-962F-CAE2A2D76F44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5464D10-B602-4B01-A14C-560536BB9563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5464D10-B602-4B01-A14C-560536BB9563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5464D10-B602-4B01-A14C-560536BB9563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5464D10-B602-4B01-A14C-560536BB9563}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

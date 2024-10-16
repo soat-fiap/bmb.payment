@@ -13,7 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Bmb.Orders.Gateway\Bmb.Orders.Gateway.csproj" />
       <ProjectReference Include="..\Bmb.Orders.Gateway\Bmb.Orders.Gateway.csproj" />
     </ItemGroup>
 

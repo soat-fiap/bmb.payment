@@ -1,6 +1,5 @@
-using System.Security.Claims;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using Bmb.Payment.Controllers.Dto;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Bmb.Payment.Api.Auth;
@@ -8,8 +7,10 @@ namespace Bmb.Payment.Api.Auth;
 /// <summary>
 /// Jwt token extensions methods
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class JwtExtensions
 {
+    
     /// <summary>
     /// Configure Jtw token validation
     /// </summary>
@@ -41,27 +42,5 @@ public static class JwtExtensions
                         new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey))
                 };
             });
-    }
-
-    // https://stackoverflow.com/a/55740879/2921329
-    /// <summary>
-    /// Get customer details from Jwt Claims
-    /// </summary>
-    /// <param name="context"></param>
-    /// <returns></returns>
-    public static CustomerDto? GetCustomerFromClaims(this HttpContext context)
-    {
-        if (Guid.TryParse(
-                context.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value,
-                out var customerId))
-        {
-            var email = context.User.Claims.First(claim => claim.Type == ClaimTypes.Email).Value;
-            var name = context.User.Claims.First(claim => claim.Type is ClaimTypes.Name or "name" ).Value;
-            var cpf = context.User.Claims.First(claim => claim.Type == "cpf").Value;
-
-            return new CustomerDto(customerId, cpf, name, email);
-        }
-
-        return default;
     }
 }

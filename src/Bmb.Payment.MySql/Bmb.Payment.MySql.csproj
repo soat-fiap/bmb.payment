@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <InternalsVisibleTo Include="FIAP.TechChallenge.ByteMeBurger.Persistence.Test" />
+      <InternalsVisibleTo Include="Bmb.Payment.MySql.Test" />
       <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     </ItemGroup>
 

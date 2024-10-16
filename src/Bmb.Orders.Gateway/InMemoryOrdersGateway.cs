@@ -1,9 +1,11 @@
-﻿using Bmb.Domain.Core.Entities;
+using System.Diagnostics.CodeAnalysis;
+using Bmb.Domain.Core.Entities;
 using Bmb.Domain.Core.ValueObjects;
 
 namespace Bmb.Orders.Gateway;
 
-public class OrdersGateway : IOrdersGateway
+[ExcludeFromCodeCoverage]
+public class InMemoryOrdersGateway: IOrdersGateway
 {
     public Task<Order?> GetAsync(Guid orderId)
     {

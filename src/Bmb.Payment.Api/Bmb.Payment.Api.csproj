@@ -43,6 +43,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="FIAP.TechChallenge.ByteMeBurger.Api.Test" />
+        <InternalsVisibleTo Include="Bmb.Payment.Api.Test" />
     </ItemGroup>
 </Project>
