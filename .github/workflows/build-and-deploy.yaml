@@ -107,56 +107,55 @@ jobs:
           echo "Resolved version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-  # build-docker-image:
-  #   if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-  #   needs: semantic-release
-  #   name: Create Docker image
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: read
-  #     packages: write
-  #     id-token: write
-  #   outputs:
-  #     API_IMAGE_TAG: ${{ fromJson(steps.meta.outputs.json).tags[0] }}
+  build-docker-image:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: semantic-release
+    name: Create Docker image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    outputs:
+      API_IMAGE_TAG: ${{ fromJson(steps.meta.outputs.json).tags[0] }}
 
-  #   steps:
-  #     - name: Extract version
-  #       run: echo ${{ needs.semantic-release.outputs.version }}
+    steps:
+      - name: Extract version
+        id: sanitize-version
+        run: |
+          echo ${{ needs.semantic-release.outputs.version }}
+          echo "version=${{ needs.semantic-release.outputs.version#v }}" >> $GITHUB_OUTPUT
 
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-  #     - name: Log into registry ${{ env.REGISTRY }}
-  #       uses: docker/login-action@v3
-  #       with:
-  #         registry: ${{ env.REGISTRY }}
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Sanitize semantic release version
-  #       id: sanitize-version
-  #       run: echo "::set-output name=version::${{ needs.semantic-release.outputs.version }}"
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          flavor: latest=true
+          tags: |
+            type=raw,value=${{ steps.sanitize-version.outputs.version }}
 
-  #     - name: Extract Docker metadata
-  #       id: meta
-  #       uses: docker/metadata-action@v5
-  #       with:
-  #         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-  #         flavor: latest=true
-  #         tags: |
-  #           type=raw,value=${{ steps.sanitize-version.outputs.version }}
-
-  #     - name: Build and push Docker image
-  #       id: build-and-push
-  #       uses: docker/build-push-action@v5
-  #       with:
-  #         context: .
-  #         file: ./src/Bmb.Payment.Api/Dockerfile
-  #         push: true
-  #         tags: ${{ steps.meta.outputs.tags }}
-  #         labels: ${{ steps.meta.outputs.labels }}
-  #         cache-from: type=gha
-  #         cache-to: type=gha,mode=
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./src/Bmb.Payment.Api/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=
