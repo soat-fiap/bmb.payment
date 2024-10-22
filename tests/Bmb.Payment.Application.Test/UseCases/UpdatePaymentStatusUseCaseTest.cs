@@ -1,19 +1,17 @@
 using AutoFixture;
-using Bmb.Domain.Core.Interfaces;
 using Bmb.Payment.Application.UseCases;
+using Bmb.Payment.Core.Contracts;
 
 namespace Bmb.Payment.Application.Test.UseCases;
 
 [TestSubject(typeof(UpdatePaymentStatusUseCase))]
 public class UpdatePaymentStatusUseCaseTest
 {
-    // private readonly Mock<IUpdateOrderStatusUseCase> _mockUpdateOrderStatusUseCase;
     private readonly Mock<IPaymentRepository> _mockPaymentRepository;
     private readonly UpdatePaymentStatusUseCase _target;
 
     public UpdatePaymentStatusUseCaseTest()
     {
-        // _mockUpdateOrderStatusUseCase = new Mock<IUpdateOrderStatusUseCase>();
         _mockPaymentRepository = new Mock<IPaymentRepository>();
         _target = new UpdatePaymentStatusUseCase(_mockPaymentRepository.Object);
     }

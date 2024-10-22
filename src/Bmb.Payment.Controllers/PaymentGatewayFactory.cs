@@ -1,6 +1,6 @@
 using Bmb.Domain.Core.Base;
-using Bmb.Domain.Core.Interfaces;
 using Bmb.Domain.Core.ValueObjects;
+using Bmb.Payment.Core.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bmb.Payment.Controllers;

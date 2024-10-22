@@ -1,8 +1,8 @@
 using AutoFixture;
 using Bmb.Domain.Core.Base;
-using Bmb.Domain.Core.Interfaces;
-using Bmb.Orders.Gateway;
 using Bmb.Payment.Application.UseCases;
+using Bmb.Payment.Core;
+using Bmb.Payment.Core.Contracts;
 
 namespace Bmb.Payment.Application.Test.UseCases;
 
@@ -31,7 +31,7 @@ public class CreatePaymentUseCaseTest
     {
         // Arrange
         var fixture = new Fixture();
-        var order = fixture.Build<Order>()
+        var order = fixture.Build<OrderDto>()
             .Without(o => o.PaymentId)
             .Create();
 
@@ -40,9 +40,9 @@ public class CreatePaymentUseCaseTest
             .With(p => p.Status, PaymentStatus.Pending)
             .Create();
 
-        _ordersGateway.Setup(o => o.GetAsync(It.IsAny<Guid>()))
+        _ordersGateway.Setup(o => o.GetCopyAsync(It.IsAny<Guid>()))
             .ReturnsAsync(order);
-        _paymentGatewayMock.Setup(ps => ps.CreatePaymentAsync(It.IsAny<Order>()))
+        _paymentGatewayMock.Setup(ps => ps.CreatePaymentAsync(It.IsAny<OrderDto>()))
             .ReturnsAsync(expectedPayment);
 
         // Act
@@ -52,15 +52,15 @@ public class CreatePaymentUseCaseTest
         using var scope = new AssertionScope();
         payment.Should().NotBeNull();
         payment.Status.Should().Be(PaymentStatus.Pending);
-        _paymentGatewayMock.Verify(ps => ps.CreatePaymentAsync(It.IsAny<Order>()), Times.Once);
+        _paymentGatewayMock.Verify(ps => ps.CreatePaymentAsync(It.IsAny<OrderDto>()), Times.Once);
     }
 
     [Fact]
     public async Task Execute_OrderNotFound_ShouldThrowDomainException()
     {
         // Arrange
-        _ordersGateway.Setup(o => o.GetAsync(It.IsAny<Guid>()))
-            .ReturnsAsync((Order?)default);
+        _ordersGateway.Setup(o => o.GetCopyAsync(It.IsAny<Guid>()))
+            .ReturnsAsync((OrderDto?)default);
 
         // Act
         var func = () => _createPaymentUseCase.Execute(Guid.NewGuid(), PaymentType.Test);
@@ -70,18 +70,16 @@ public class CreatePaymentUseCaseTest
         await func.Should()
             .ThrowExactlyAsync<EntityNotFoundException>()
             .WithMessage("Order not found.");
-        _paymentGatewayMock.Verify(ps => ps.CreatePaymentAsync(It.IsAny<Order>()), Times.Never);
+        _paymentGatewayMock.Verify(ps => ps.CreatePaymentAsync(It.IsAny<OrderDto>()), Times.Never);
     }
 
     [Fact]
     public async Task Execute_OrderAlreadyHasPayment_ShouldThrowDomainException()
     {
         // Arrange
-        _ordersGateway.Setup(o => o.GetAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(new Order
-            {
-                PaymentId = new PaymentId(Guid.NewGuid())
-            });
+        _ordersGateway.Setup(o => o.GetCopyAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(new OrderDto(Guid.NewGuid(), null, new List<OrderItemDto>(), OrderStatus.PaymentPending, "",
+                new PaymentId(Guid.NewGuid()), 10));
 
         // Act
         var func = () => _createPaymentUseCase.Execute(Guid.NewGuid(), PaymentType.Test);

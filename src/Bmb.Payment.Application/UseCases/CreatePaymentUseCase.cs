@@ -1,7 +1,7 @@
 using Bmb.Domain.Core.Base;
-using Bmb.Domain.Core.Interfaces;
 using Bmb.Domain.Core.ValueObjects;
-using Bmb.Orders.Gateway;
+using Bmb.Payment.Core;
+using Bmb.Payment.Core.Contracts;
 
 namespace Bmb.Payment.Application.UseCases;
 
@@ -18,7 +18,7 @@ public class CreatePaymentUseCase : ICreatePaymentUseCase
 
     public async Task<Bmb.Domain.Core.Entities.Payment?> Execute(Guid orderId, PaymentType paymentType)
     {
-        var order = await _ordersGateway.GetAsync(orderId);
+        var order = await _ordersGateway.GetCopyAsync(orderId);
 
         if (order is null)
             throw new EntityNotFoundException("Order not found.");

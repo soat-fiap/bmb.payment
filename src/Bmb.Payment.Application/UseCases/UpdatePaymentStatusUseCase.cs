@@ -1,5 +1,5 @@
-using Bmb.Domain.Core.Interfaces;
 using Bmb.Domain.Core.ValueObjects;
+using Bmb.Payment.Core.Contracts;
 
 namespace Bmb.Payment.Application.UseCases;
 

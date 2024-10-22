@@ -22,4 +22,8 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Bmb.Payment.Core\Bmb.Payment.Core.csproj" />
+    </ItemGroup>
+
 </Project>
