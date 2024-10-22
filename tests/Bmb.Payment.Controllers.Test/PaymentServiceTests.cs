@@ -1,8 +1,8 @@
 using AutoFixture;
-using Bmb.Domain.Core.Interfaces;
 using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Application.UseCases;
 using Bmb.Payment.Controllers.Dto;
+using Bmb.Payment.Core.Contracts;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using JetBrains.Annotations;

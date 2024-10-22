@@ -1,11 +1,15 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Bmb.Payment.MySql.Dto;
 
+[ExcludeFromCodeCoverage]
 public class PaymentDto
 {
     public Guid Id { get; init; }
     public Guid OrderId { get; init; }
     public int Status { get; init; }
     public int PaymentType { get; init; }
+    
     public string QrCode { get; set; }
     public decimal Amount { get; init; }
     public DateTime Created { get; init; }

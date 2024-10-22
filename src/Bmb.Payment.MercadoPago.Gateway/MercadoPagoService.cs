@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using Bmb.Domain.Core.Entities;
-using Bmb.Domain.Core.Interfaces;
 using Bmb.Domain.Core.ValueObjects;
+using Bmb.Payment.Core;
+using Bmb.Payment.Core.Contracts;
 using Bmb.Payment.MercadoPago.Gateway.Configuration;
 using MercadoPago.Client;
 using MercadoPago.Client.Common;
@@ -9,6 +9,8 @@ using MercadoPago.Client.Payment;
 using Microsoft.Extensions.Logging;
 using DomainPayment = Bmb.Domain.Core.Entities.Payment;
 using DomainPaymentStatus = Bmb.Domain.Core.ValueObjects.PaymentStatus;
+
+// namespace Bmb.Payment.MercadoPago.Gateway;
 
 namespace Bmb.Payment.MercadoPago.Gateway;
 
@@ -27,7 +29,7 @@ public class MercadoPagoService : IPaymentGateway
         _mercadoPagoOptions = mercadoPagoOptions;
     }
 
-    public async Task<DomainPayment> CreatePaymentAsync(Order order)
+    public async Task<DomainPayment> CreatePaymentAsync(OrderDto order)
     {
         var requestOptions = new RequestOptions()
         {
@@ -67,7 +69,7 @@ public class MercadoPagoService : IPaymentGateway
         }
     }
 
-    private static PaymentCreateRequest GetPaymentCreateRequest(Order order)
+    private static PaymentCreateRequest GetPaymentCreateRequest(OrderDto order)
     {
         var paymentPayerRequest = order.Customer is null
             ? new PaymentPayerRequest
@@ -107,7 +109,7 @@ public class MercadoPagoService : IPaymentGateway
         };
     }
 
-    private static PaymentPayerRequest MapPaymentPayerRequest(Order order)
+    private static PaymentPayerRequest MapPaymentPayerRequest(OrderDto order)
         => new()
         {
             Email = order!.Customer.Email,
@@ -120,8 +122,8 @@ public class MercadoPagoService : IPaymentGateway
             },
         };
 
-    private static IEnumerable<PaymentItemRequest> MapPaymentItemRequests(Order order)
-        => order.OrderItems.Select(item =>
+    private static IEnumerable<PaymentItemRequest> MapPaymentItemRequests(OrderDto order)
+        => order.Items.Select(item =>
             new PaymentItemRequest
             {
                 Id = item.Id.ToString(),
@@ -139,12 +141,12 @@ public class MercadoPagoService : IPaymentGateway
             }
         );
 
-    private static PaymentCreateRequest MapPaymentCreateRequest(Order order, PaymentPayerRequest payer,
+    private static PaymentCreateRequest MapPaymentCreateRequest(OrderDto order, PaymentPayerRequest payer,
         PaymentAdditionalInfoRequest paymentAdditionalInfoRequest, decimal amount)
         => new()
         {
-            Description = $"Payment for Order {order.TrackingCode.Value}",
-            ExternalReference = order.TrackingCode.Value,
+            Description = $"Payment for Order {order.OrderTrackingCode}",
+            ExternalReference = order.OrderTrackingCode,
             Installments = 1,
             Payer = payer,
             PaymentMethodId = "pix",

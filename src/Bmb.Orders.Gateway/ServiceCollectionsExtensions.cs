@@ -1,16 +1,29 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Amazon;
+using Amazon.DynamoDBv2;
+using Amazon.Runtime;
+using Bmb.Orders.Gateway.Repository;
+using Bmb.Payment.Core;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Refit;
 
 namespace Bmb.Orders.Gateway;
 
 [ExcludeFromCodeCoverage]
 public static class ServiceCollectionsExtensions
 {
-    public static void AddOrdersGateway(this IServiceCollection services)
+    public static void AddOrdersGateway(this IServiceCollection services, IConfiguration configuration)
     {
-        // services.AddScoped<IOrdersGateway, InMemoryOrdersGateway>();
-        services.AddRefitClient<IOrdersGateway>()
-            .ConfigureHttpClient(c=>c.BaseAddress = new Uri("orders-api"));
+        services.AddScoped<IAmazonDynamoDB>(_ =>
+        {
+            var dynamoDbSettings = configuration
+                .GetSection("AwsSettings")
+                .Get<AwsSettings>();
+            
+            return new AmazonDynamoDBClient(
+                new BasicAWSCredentials(dynamoDbSettings!.ClientId, dynamoDbSettings.ClientSecret),
+                RegionEndpoint.GetBySystemName(dynamoDbSettings.Region));
+        });
+        services.AddScoped<IOrdersGateway, InMemoryOrdersGateway>();
     }
 }

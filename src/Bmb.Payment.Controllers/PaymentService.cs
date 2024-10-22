@@ -1,8 +1,8 @@
-using Bmb.Domain.Core.Interfaces;
 using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Application.UseCases;
 using Bmb.Payment.Controllers.Contracts;
 using Bmb.Payment.Controllers.Dto;
+using Bmb.Payment.Core.Contracts;
 
 namespace Bmb.Payment.Controllers;
 
@@ -31,8 +31,6 @@ public class PaymentService : IPaymentService
             return null;
 
         await _paymentRepository.SaveAsync(payment);
-        // TODO MassTransit
-        // await _updateOrderPaymentUseCase.Execute(payment.OrderId, payment.Id);
         return payment.FromEntityToDto();
     }
 

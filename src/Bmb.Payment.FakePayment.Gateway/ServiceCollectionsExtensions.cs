@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
-using Bmb.Domain.Core.Interfaces;
 using Bmb.Domain.Core.ValueObjects;
+using Bmb.Payment.Core.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bmb.Payment.FakePayment.Gateway;

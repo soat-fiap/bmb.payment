@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Bmb.Domain.Core.Interfaces;
 using Bmb.Orders.Gateway;
 using Bmb.Payment.Application;
 using Bmb.Payment.Controllers;
+using Bmb.Payment.Core.Contracts;
 using Bmb.Payment.FakePayment.Gateway;
 using Bmb.Payment.MercadoPago.Gateway;
 using Bmb.Payment.MySql;
@@ -22,7 +22,7 @@ public static class ServiceCollectionsExtensions
         ConfigHybridCache(serviceCollection, configuration);
         serviceCollection.AddUseCases();
         serviceCollection.AddControllers();
-        serviceCollection.AddOrdersGateway();
+        serviceCollection.AddOrdersGateway(configuration);
     }
 
     private static void ConfigHybridCache(IServiceCollection services, IConfiguration configuration)

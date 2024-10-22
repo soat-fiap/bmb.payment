@@ -1,9 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Bmb.Domain.Core.Events;
 using Bmb.Payment.Api.Auth;
+using Bmb.Payment.Application;
+using Bmb.Payment.Application.UseCases;
 using Bmb.Payment.DI;
 using HealthChecks.UI.Client;
+using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
@@ -47,7 +51,21 @@ public class Program
                     });
             });
 
-
+            builder.Services.AddHttpLogging(options => { });
+            builder.Services.AddMassTransit(x =>
+            {
+                // x.AddConsumers(typeof(Program).Assembly);
+                x.AddConsumer<OrderCreatedConsumer>();
+                x.UsingAmazonSqs((context, cfg) =>
+                {
+                    cfg.Host("us-east-1", h =>
+                    {
+                        // h.Scope("dev", true);
+                    });
+                    cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter( false));
+                });
+            });
+            
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
             builder.Services.AddSwaggerGen();
@@ -100,6 +118,7 @@ public class Program
             AddHealthChecks(builder, builder.Configuration);
 
             var app = builder.Build();
+            app.UseHttpLogging();
             logger = app.Services.GetService<ILogger<Program>>();
             app.UseExceptionHandler();
 
