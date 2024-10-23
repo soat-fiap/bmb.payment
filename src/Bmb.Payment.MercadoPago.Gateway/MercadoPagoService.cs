@@ -10,8 +10,6 @@ using Microsoft.Extensions.Logging;
 using DomainPayment = Bmb.Domain.Core.Entities.Payment;
 using DomainPaymentStatus = Bmb.Domain.Core.ValueObjects.PaymentStatus;
 
-// namespace Bmb.Payment.MercadoPago.Gateway;
-
 namespace Bmb.Payment.MercadoPago.Gateway;
 
 [ExcludeFromCodeCoverage]

@@ -8,7 +8,7 @@ public class OrderDto
 {
     public Guid Id { get; set; }
     public CustomerDto? Customer { get; set; }
-    public List<OrderItemDto> Items { get; set; } = null!;
+    public IReadOnlyCollection<OrderItemDto> Items { get; set; } = null!;
     public OrderStatus Status { get; set; }
     public string OrderTrackingCode { get; set; } = null!;
     public PaymentId PaymentId { get; set; } = null!;
@@ -18,7 +18,7 @@ public class OrderDto
     {
     }
 
-    public OrderDto(Guid id, CustomerDto? customer, List<OrderItemDto> items, OrderStatus status,
+    public OrderDto(Guid id, CustomerDto? customer, IReadOnlyCollection<OrderItemDto> items, OrderStatus status,
         string orderTrackingCode, PaymentId paymentId, decimal total)
     {
         Id = id;
