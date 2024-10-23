@@ -10,7 +10,7 @@ public class PaymentDto
     public int Status { get; init; }
     public int PaymentType { get; init; }
     
-    public string QrCode { get; set; }
+    public string QrCode { get; init; }
     public decimal Amount { get; init; }
     public DateTime Created { get; init; }
     public DateTime? Updated { get; init; }

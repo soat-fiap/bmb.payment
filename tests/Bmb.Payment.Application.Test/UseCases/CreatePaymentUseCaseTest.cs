@@ -40,7 +40,7 @@ public class CreatePaymentUseCaseTest
             .With(p => p.Status, PaymentStatus.Pending)
             .Create();
 
-        _ordersGateway.Setup(o => o.GetCopyAsync(It.IsAny<Guid>()))
+        _ordersGateway.Setup(o => o.GetCopyAsync(It.IsAny<Guid>(), default))
             .ReturnsAsync(order);
         _paymentGatewayMock.Setup(ps => ps.CreatePaymentAsync(It.IsAny<OrderDto>()))
             .ReturnsAsync(expectedPayment);
@@ -59,7 +59,7 @@ public class CreatePaymentUseCaseTest
     public async Task Execute_OrderNotFound_ShouldThrowDomainException()
     {
         // Arrange
-        _ordersGateway.Setup(o => o.GetCopyAsync(It.IsAny<Guid>()))
+        _ordersGateway.Setup(o => o.GetCopyAsync(It.IsAny<Guid>(), default))
             .ReturnsAsync((OrderDto?)default);
 
         // Act
@@ -77,7 +77,7 @@ public class CreatePaymentUseCaseTest
     public async Task Execute_OrderAlreadyHasPayment_ShouldThrowDomainException()
     {
         // Arrange
-        _ordersGateway.Setup(o => o.GetCopyAsync(It.IsAny<Guid>()))
+        _ordersGateway.Setup(o => o.GetCopyAsync(It.IsAny<Guid>(), default))
             .ReturnsAsync(new OrderDto(Guid.NewGuid(), null, new List<OrderItemDto>(), OrderStatus.PaymentPending, "",
                 new PaymentId(Guid.NewGuid()), 10));
 
