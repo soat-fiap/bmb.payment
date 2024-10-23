@@ -1,0 +1,95 @@
+name: "Terraform Plan"
+
+on:
+  pull_request:
+
+env:
+  TF_CLOUD_ORGANIZATION: "${{ vars.BMB_TF_ORGANIZATION }}"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+  TF_WORKSPACE: "${{ vars.TF_WORKSPACE }}"
+  CONFIG_DIRECTORY: "./terraform"
+
+jobs:
+
+  terraform:
+    environment: dev
+    name: "Terraform Plan"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create .auto.tfvars file
+        run: |
+          cat <<EOF > tf/api.auto.tfvars
+          eks_cluster_name = "${{ vars.BMB_EKS_CLUSTER_NAME }}"
+          mercadopago_webhook_secret = "${{ secrets.BMB_MERCADO_PAGO_WH_SECRET}}"
+          mercadopago_accesstoken = "${{ secrets.BMB_MERCADO_PAGO_ACCESS_TOKEN }}"
+          jwt_signing_key = "${{ secrets.BMB_JWT_SECRET_KEY }}"
+          jwt_issuer = "${{ vars.BMB_JWT_ISSUER }}"
+          jwt_aud = "${{ vars.BMB_JWT_AUDIENCE }}"
+          internal_elb_name = "${{ vars.BMB_INTERNAL_LB_NAME }}"
+          api_access_key_id = "${{ secrets.AWS_API_ACCESS_KEY_ID }}"
+          api_secret_access_key = "${{ secrets.AWS_API_SECRET_ACCESS_KEY }}"
+          EOF
+
+      - name: Upload Configuration
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.3.1
+        id: plan-upload
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          directory: ${{ env.CONFIG_DIRECTORY }}
+          speculative: true
+
+      - name: Create Plan Run
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.3.1
+        id: plan-run
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
+          plan_only: true
+
+      - name: Get Plan Output
+        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.3.1
+        id: plan-output
+        with:
+          plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
+
+      - name: Update PR
+        uses: actions/github-script@v7
+        id: plan-comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 1. Retrieve existing bot comments for the PR
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
+            });
+            const output = `#### Terraform Cloud Plan Output
+               \`\`\`
+               Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
+               \`\`\`
+               [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
+               `;
+            // 3. Delete previous comment so PR timeline makes sense
+            if (botComment) {
+              github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+              });
+            }
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });

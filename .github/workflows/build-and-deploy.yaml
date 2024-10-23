@@ -158,3 +158,72 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=
+
+  create-app:
+    if: github.ref == 'refs/heads/main'
+    needs: [build-docker-image]
+    name: "Terraform Apply"
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      contents: read
+    outputs:
+      config_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create .auto.tfvars file
+        env:
+          API_IMAGE_TAG: ${{needs.build-docker-image.outputs.API_IMAGE_TAG}}
+        run: |
+          cat <<EOF > tf/api.auto.tfvars
+          eks_cluster_name = "${{ vars.BMB_EKS_CLUSTER_NAME }}"
+          mercadopago_webhook_secret = "${{ secrets.BMB_MERCADO_PAGO_WH_SECRET }}"
+          mercadopago_accesstoken = "${{ secrets.BMB_MERCADO_PAGO_ACCESS_TOKEN }}"
+          jwt_signing_key = "${{ secrets.BMB_JWT_SECRET_KEY }}"
+          jwt_issuer = "${{ vars.BMB_JWT_ISSUER }}"
+          jwt_aud = "${{ vars.BMB_JWT_AUDIENCE }}"
+          api_docker_image = "${{ env.API_IMAGE_TAG }}"
+          internal_elb_name = "${{ vars.BMB_INTERNAL_LB_NAME }}"
+          api_access_key_id = "${{ secrets.AWS_API_ACCESS_KEY_ID }}"
+          api_secret_access_key = "${{ secrets.AWS_API_SECRET_ACCESS_KEY }}"
+          EOF
+
+      - name: Upload Configuration
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.3.1
+        id: apply-upload
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          directory: ${{ env.CONFIG_DIRECTORY }}
+
+      - name: Create Apply Run
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.3.1
+        id: apply-run
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
+          message: "Create Run from GitHub Actions CI ${{ github.sha }}"
+
+      - uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.3.1
+        if: ${{ vars.TF_AUTO_APPROVE == 'true' }}
+        id: apply
+        with:
+          run: ${{ steps.apply-run.outputs.run_id }}
+          comment: "Confirmed from GitHub Actions CI ${{ github.sha }}"
+
+  destroy-plan:
+    name: "Create terraform destroy plan"
+    needs: [create-app]
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Create plan
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.3.1
+        id: destroy-plan
+        with:
+          workspace: ${{ vars.TF_WORKSPACE }}
+          configuration_version: ${{ needs.create-app.outputs.config_version }}
+          message: "Create Destroy run from GitHub Actions CI ${{ github.sha }}"
+          is_destroy: true

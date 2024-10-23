@@ -47,3 +47,10 @@ msbuild.wrn
 
 Logs/
 kubernetes/secret-mercadopago.yaml
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
