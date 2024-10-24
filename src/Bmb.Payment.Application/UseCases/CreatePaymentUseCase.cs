@@ -1,4 +1,5 @@
 using Bmb.Domain.Core.Base;
+using Bmb.Domain.Core.Events.Notifications;
 using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Core;
 using Bmb.Payment.Core.Contracts;
@@ -9,11 +10,15 @@ public class CreatePaymentUseCase : ICreatePaymentUseCase
 {
     private readonly IPaymentGatewayFactoryMethod _paymentGatewayFactory;
     private readonly IOrdersGateway  _ordersGateway;
+    private readonly IDispatcher _dispatcher;
 
-    public CreatePaymentUseCase(IPaymentGatewayFactoryMethod paymentGatewayFactory, IOrdersGateway ordersGateway)
+    public CreatePaymentUseCase(IPaymentGatewayFactoryMethod paymentGatewayFactory,
+        IOrdersGateway ordersGateway,
+        IDispatcher dispatcher)
     {
         _paymentGatewayFactory = paymentGatewayFactory;
         _ordersGateway = ordersGateway;
+        _dispatcher = dispatcher;
     }
 
     public async Task<Bmb.Domain.Core.Entities.Payment?> Execute(Guid orderId, PaymentType paymentType)
@@ -30,8 +35,7 @@ public class CreatePaymentUseCase : ICreatePaymentUseCase
         var payment = await paymentGateway.CreatePaymentAsync(order);
         if (payment != null)
         {
-            // TODO MassTransit
-            // DomainEventTrigger.RaisePaymentCreated(new PaymentCreated(payment));
+            await _dispatcher.PublishAsync(new PaymentCreated(payment.Id.Value, payment.OrderId));
         }
         return payment;
     }

@@ -7,18 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.402" />
-      <PackageReference Include="Bmb.Domain.Core" Version="0.0.3" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-      <PackageReference Include="Refit.HttpClientFactory" Version="7.2.1" />
+      <PackageReference Include="MassTransit" Version="8.2.5" />
+      <PackageReference Include="MassTransit.AmazonSQS" Version="8.2.5" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Bmb.Orders.Gateway\Bmb.Orders.Gateway.csproj" />
       <ProjectReference Include="..\Bmb.Payment.Core\Bmb.Payment.Core.csproj" />
     </ItemGroup>
-
+    
     <ItemGroup>
-        <InternalsVisibleTo Include="Bmb.Orders.Gateway.Test" />
+        <InternalsVisibleTo Include="Bmb.Payment.Bus.Test" />
     </ItemGroup>
-
 </Project>

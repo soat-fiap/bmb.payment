@@ -6,20 +6,4 @@ namespace Bmb.Orders.Gateway;
 /// DynamoDb settings
 /// </summary>
 [ExcludeFromCodeCoverage]
-internal class AwsSettings
-{
-    /// <summary>
-    /// AWS Region
-    /// </summary>
-    public string Region { get; set; } = string.Empty;
-
-    /// <summary>
-    /// AWS Secret Id
-    /// </summary>
-    public string ClientSecret { get; set; } = string.Empty;
-
-    /// <summary>
-    /// AWS Client Id
-    /// </summary>
-    public string ClientId { get; set; } = string.Empty;
-}
+public record AwsSettings(string Region, string ClientSecret, string ClientId);

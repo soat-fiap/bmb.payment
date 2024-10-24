@@ -24,6 +24,6 @@ public static class ServiceCollectionsExtensions
                 new BasicAWSCredentials(dynamoDbSettings!.ClientId, dynamoDbSettings.ClientSecret),
                 RegionEndpoint.GetBySystemName(dynamoDbSettings.Region));
         });
-        services.AddScoped<IOrdersGateway, InMemoryOrdersGateway>();
+        services.AddScoped<IOrdersGateway, OrderReplicaRepository>();
     }
 }
