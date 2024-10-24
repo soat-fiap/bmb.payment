@@ -140,7 +140,6 @@ public class Program
 
     private static void AddHealthChecks(WebApplicationBuilder builder, IConfiguration configuration)
     {
-        builder.Services.AddHealthChecks()
-            .AddMySql(configuration.GetConnectionString("MySql")!);
+        builder.Services.AddHealthChecks();
     }
 }
