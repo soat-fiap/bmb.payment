@@ -1,4 +1,4 @@
-## Overview (deploy)
+## Overview
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=soat-fiap_bmb.payment&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=soat-fiap_bmb.payment)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=soat-fiap_bmb.payment&metric=coverage)](https://sonarcloud.io/summary/new_code?id=soat-fiap_bmb.payment)
