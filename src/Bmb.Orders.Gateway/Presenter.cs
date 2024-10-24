@@ -5,7 +5,7 @@ using Bmb.Payment.Core;
 
 namespace Bmb.Orders.Gateway;
 
-internal static class Presenter
+public static class Presenter
 {
     internal static OrderDto? ToDomain(this Dictionary<string, AttributeValue> item)
     {
@@ -22,17 +22,21 @@ internal static class Presenter
         };
     }
 
-    internal static OrderReplicaDto ToDto(this Order order)
+    public static OrderReplicaDto ToReplicaDto(this Order order)
+    {
+        var orderDto = order.ToDto();
+        return new OrderReplicaDto(order.Id, orderDto);
+    }
+    
+    public static OrderDto ToDto(this Order order)
     {
         var customer = order.Customer is null
             ? null
             : new CustomerDto(order.Customer.Id, order.Customer.Cpf, order.Customer.Name!, order.Customer.Email!);
         var orderItems = order.OrderItems
             .Select(x => new OrderItemDto(x.Id, x.OrderId, x.ProductName, x.UnitPrice, x.Quantity)).ToList();
-        var orderDto = new OrderDto(order.Id, customer, orderItems, order.Status, order.TrackingCode.Value,
+        return new OrderDto(order.Id, customer, orderItems, order.Status, order.TrackingCode.Value,
             order.PaymentId!, order.Total);
-
-        return new OrderReplicaDto(order.Id, orderDto);
     }
 
     internal static Dictionary<string, AttributeValue> ToDynamoDb(this OrderDto order)
