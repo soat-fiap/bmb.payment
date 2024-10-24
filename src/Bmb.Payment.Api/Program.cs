@@ -98,8 +98,7 @@ public class Program
             builder.Services.AddExceptionHandler<DomainExceptionHandler>();
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
-
-            AddHealthChecks(builder, builder.Configuration);
+            builder.Services.ConfigureHealthCheck();
 
             var app = builder.Build();
             app.UseHttpLogging();
@@ -136,10 +135,5 @@ public class Program
         {
             Log.CloseAndFlush();
         }
-    }
-
-    private static void AddHealthChecks(WebApplicationBuilder builder, IConfiguration configuration)
-    {
-        builder.Services.AddHealthChecks();
     }
 }
