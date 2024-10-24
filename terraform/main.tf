@@ -10,15 +10,60 @@ data "aws_eks_cluster" "techchallenge_cluster" {
 # DATABASE
 ##############################
 
+
+resource "aws_dynamodb_table" "payment_orders_replica" {
+  name           = "Payment-OrdersReplica"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "Id"
+  stream_enabled = false
+
+  attribute {
+    name = "Id"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ExpireAt"
+  }
+}
+
+resource "aws_dynamodb_table" "payments_table" {
+  name           = "Payments"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "Id"
+  stream_enabled = false
+
+  attribute {
+    name = "Id"
+    type = "S"
+  }
+  attribute {
+    name = "ExternalReference"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name            = "ExternalReference-index"
+    hash_key        = "ExternalReference"
+    projection_type = "ALL"
+    write_capacity  = 1
+    read_capacity   = 1
+  }
+}
+
 locals {
-  jwt_issuer                  = var.jwt_issuer
-  jwt_aud                     = var.jwt_aud
-  docker_image                = var.api_docker_image
+  jwt_issuer            = var.jwt_issuer
+  jwt_aud               = var.jwt_aud
+  docker_image          = var.api_docker_image
+  aws_access_key        = var.api_access_key_id
+  aws_secret_access_key = var.api_secret_access_key
+  aws_region            = "us-east-1"
+  jwt_signing_key       = var.jwt_signing_key
 }
 
 
 ##############################
-# CONFIGS/SECRETS
+# NAMESPACE
 ##############################
 
 resource "kubernetes_namespace" "payment" {
@@ -27,40 +72,44 @@ resource "kubernetes_namespace" "payment" {
   }
 }
 
+##############################
+# CONFIGS/SECRETS
+##############################
+
+
 resource "kubernetes_config_map_v1" "config_map_api" {
   metadata {
-    name = "configmap-api"
+    name      = "configmap-payment-api"
     namespace = "payment"
     labels = {
-      "app"       = "api"
+      "app"       = "payment-api"
       "terraform" = true
     }
   }
   data = {
     "ASPNETCORE_ENVIRONMENT"               = "Development"
+    "MercadoPago__NotificationUrl"         = ""
     "Serilog__WriteTo__2__Args__serverUrl" = "http://svc-seq:80"
     "Serilog__WriteTo__2__Args__formatter" = "Serilog.Formatting.Json.JsonFormatter, Serilog"
-    "MercadoPago__NotificationUrl"         = ""
     "Serilog__Enrich__0"                   = "FromLogContext"
     "HybridCache__Expiration"              = "01:00:00"
     "HybridCache__LocalCacheExpiration"    = "01:00:00"
     "HybridCache__Flags"                   = "DisableDistributedCache"
     "JwtOptions__Issuer"                   = local.jwt_issuer
     "JwtOptions__Audience"                 = local.jwt_aud
-    "JwtOptions__SigningKey"               = var.jwt_signing_key
     "JwtOptions__ExpirationSeconds"        = 3600
     "JwtOptions__UseAccessToken"           = true
-    # "SqsSettings__QueueName"               = local.events_queue_name
-    "SqsSettings__Enabled"                 = true
-    "SqsSettings__Region"                  = "us-east-1"
-    "SqsSettings__ClientId"                = var.api_access_key_id
-    "SqsSettings__ClientSecret"            = var.api_secret_access_key
+    "JwtOptions__SigningKey"               = local.jwt_signing_key
+    "AwsSettings__Region"                  = local.aws_region
+    "AwsSettings__ClientSecret"            = local.aws_secret_access_key
+    "AwsSettings__ClientId"                = local.aws_access_key
+
   }
 }
 
-resource "kubernetes_secret" "secret_mercadopago" {
+resource "kubernetes_secret" "secret_api" {
   metadata {
-    name = "secret-mercadopago"
+    name      = "secret-payment-api"
     namespace = "payment"
     labels = {
       app         = "api-pod"
@@ -78,10 +127,9 @@ resource "kubernetes_secret" "secret_mercadopago" {
 # API
 ####################################
 
-
 resource "kubernetes_service" "payment-api-svc" {
   metadata {
-    name = var.internal_elb_name
+    name      = var.internal_elb_name
     namespace = "payment"
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type"   = "nlb"
@@ -97,18 +145,24 @@ resource "kubernetes_service" "payment-api-svc" {
     }
     type = "LoadBalancer"
     selector = {
-      app : "api"
+      app : "payment-api"
     }
   }
 }
 
 resource "kubernetes_deployment" "deployment_payment_api" {
-  depends_on = [kubernetes_secret.secret_mercadopago, kubernetes_config_map_v1.config_map_api]
+  depends_on = [
+    kubernetes_secret.secret_api,
+    kubernetes_config_map_v1.config_map_api,
+    # aws_dynamodb_table.payments_table,
+    # aws_dynamodb_table.payment_orders_replica
+  ]
+
   metadata {
-    name = "deployment-payment-api"
+    name      = "deployment-payment-api"
     namespace = "payment"
     labels = {
-      app         = "api"
+      app         = "payment-api"
       "terraform" = true
     }
   }
@@ -116,21 +170,21 @@ resource "kubernetes_deployment" "deployment_payment_api" {
     replicas = 1
     selector {
       match_labels = {
-        app = "api"
+        app = "payment-api"
       }
     }
     template {
       metadata {
-        name = "pod-api"
+        name = "pod-payment-api"
         labels = {
-          app         = "api"
+          app         = "payment-api"
           "terraform" = true
         }
       }
       spec {
         automount_service_account_token = false
         container {
-          name  = "api-container"
+          name  = "payment-api-container"
           image = local.docker_image
           port {
             name           = "liveness-port"
@@ -172,12 +226,12 @@ resource "kubernetes_deployment" "deployment_payment_api" {
           }
           env_from {
             config_map_ref {
-              name = "configmap-api"
+              name = "configmap-payment-api"
             }
           }
           env_from {
             secret_ref {
-              name = "secret-mercadopago"
+              name = "secret-payment-api"
             }
           }
         }
@@ -188,7 +242,7 @@ resource "kubernetes_deployment" "deployment_payment_api" {
 
 resource "kubernetes_horizontal_pod_autoscaler_v2" "hpa_api" {
   metadata {
-    name = "hpa-api"
+    name      = "hpa-payment-api"
     namespace = "payment"
   }
   spec {
@@ -203,7 +257,7 @@ resource "kubernetes_horizontal_pod_autoscaler_v2" "hpa_api" {
     metric {
       type = "ContainerResource"
       container_resource {
-        container = "api-container"
+        container = "payment-api-container"
         name      = "cpu"
         target {
           average_utilization = 65
@@ -220,7 +274,7 @@ resource "kubernetes_horizontal_pod_autoscaler_v2" "hpa_api" {
 
 resource "kubernetes_service" "svc_seq" {
   metadata {
-    name = "svc-seq"
+    name      = "svc-seq"
     namespace = "payment"
     labels = {
       "terraform" = true
@@ -240,7 +294,7 @@ resource "kubernetes_service" "svc_seq" {
 
 resource "kubernetes_deployment" "deployment_seq" {
   metadata {
-    name = "deployment-seq"
+    name      = "deployment-seq"
     namespace = "payment"
     labels = {
       app         = "seq"
