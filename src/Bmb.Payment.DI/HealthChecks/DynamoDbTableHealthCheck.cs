@@ -44,7 +44,6 @@ public static class DynamoDbHealthCheckExtensions
         HealthStatus? failureStatus = default, IEnumerable<string> tags = default,
         TimeSpan? timeout = default)
     {
-        
         return builder.Add(new HealthCheckRegistration(
             $"{tableName}-health",
             sp => new DynamoDbTableHealthCheck(sp.GetRequiredService<IAmazonDynamoDB>(), tableName),

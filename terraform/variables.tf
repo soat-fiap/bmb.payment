@@ -17,7 +17,7 @@ variable "region" {
 
 variable "eks_cluster_name" {
   type    = string
-  default = "quixada"
+  default = "eks_dev_quixada"
 }
 
 variable "mercadopago_webhook_secret" {
@@ -33,6 +33,7 @@ variable "mercadopago_accesstoken" {
 variable "jwt_signing_key" {
   type      = string
   sensitive = true
+  default = "PkOhRwy6UtniEMo7lLWp3bADctYgnDHCTvH+2YkDeGg="
 }
 
 variable "jwt_issuer" {
@@ -49,22 +50,24 @@ variable "jwt_aud" {
 
 variable "api_docker_image" {
   type    = string
-  default = "ghcr.io/soat-fiap/bmb.payment/api:1.0.0"
+  default = "ghcr.io/soat-fiap/bmb.payment/api:1.2.1"
 }
 
 variable "internal_elb_name" {
   type    = string
-  default = "payment-api-internal-elb"
+  default = "api-internal-elb"
 }
 
 variable "api_access_key_id" {
   type      = string
   nullable  = false
   sensitive = true
+  default = ""
 }
 
 variable "api_secret_access_key" {
   type      = string
   nullable  = false
   sensitive = true
+  default = ""
 }

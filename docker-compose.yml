@@ -1,7 +1,5 @@
 ﻿services:
   api:
-    depends_on:
-      - database
     container_name: payment_api
     build:
       context: ./
@@ -20,7 +18,6 @@
     ports:
       - 8080:8080
     environment:
-      - ConnectionStrings__MySql=Server=database;Database=${MYSQL_DATABASE};Uid=${MYSQL_USERID};Pwd=${MYSQL_PASSWORD};Port=${MYSQL_PORT}
       - ASPNETCORE_ENVIRONMENT=Development
       - Serilog__WriteTo__2__Args__serverUrl=http://seq:5341
       - Serilog__Enrich__0=FromLogContext
@@ -35,29 +32,6 @@
       - JwtOptions__Audience=${JwtOptions_Audience}
       - JwtOptions__ExpirationSeconds=${JwtOptions_ExpirationSeconds}
       - JwtOptions__UseAccessToken=${JwtOptions_UseAccessToken}
-  database:
-    container_name: restaurant_db
-    build:
-      context: ./database
-      dockerfile: Dockerfile
-      tags:
-        - techchallenge/restaurant_db
-    restart: always
-    environment:
-    - MYSQL_ROOT_PASSWORD=admin
-    - MYSQL_DATABASE=${MYSQL_DATABASE}
-    - MYSQL_USER=${MYSQL_USERID}
-    - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    ports:
-      - 3306:3306
-    networks:
-      - tech-challenge
-
-#  adminer:
-#    image: adminer
-#    restart: always
-#    ports:
-#      - 27017:27017
 
   seq:
     image: datalust/seq:latest
