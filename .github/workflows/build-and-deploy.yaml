@@ -13,7 +13,11 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/api
-
+  TF_CLOUD_ORGANIZATION: "${{ vars.BMB_TF_ORGANIZATION }}"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+  TF_WORKSPACE: "${{ vars.TF_WORKSPACE }}"
+  CONFIG_DIRECTORY: "./terraform"
+  
 jobs:
   sonarcloud:
     name: Build and analyze
@@ -178,7 +182,7 @@ jobs:
         env:
           API_IMAGE_TAG: ${{needs.build-docker-image.outputs.API_IMAGE_TAG}}
         run: |
-          cat <<EOF > tf/api.auto.tfvars
+          cat <<EOF > terraform/api.auto.tfvars
           eks_cluster_name = "${{ vars.BMB_EKS_CLUSTER_NAME }}"
           mercadopago_webhook_secret = "${{ secrets.BMB_MERCADO_PAGO_WH_SECRET }}"
           mercadopago_accesstoken = "${{ secrets.BMB_MERCADO_PAGO_ACCESS_TOKEN }}"
