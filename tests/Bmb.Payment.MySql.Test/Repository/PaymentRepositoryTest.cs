@@ -71,8 +71,8 @@ public class PaymentRepositoryTest
         // Arrange
         var expectedPayment = new Fixture().Create<Domain.Core.Entities.Payment>();
 
-        _mockDynamoDb.Setup(c => c.ScanAsync(It.IsAny<ScanRequest>(), default))
-            .ReturnsAsync(new ScanResponse
+        _mockDynamoDb.Setup(c => c.QueryAsync(It.IsAny<QueryRequest>(), default))
+            .ReturnsAsync(new QueryResponse
             {
                 Items = new List<Dictionary<string, AttributeValue>>
                 {
