@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AspNetCore.HealthChecks.DynamoDb" Version="8.0.1" />
       <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" Version="9.0.0-preview.6.24328.4" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="8.0.0" />
@@ -22,6 +23,9 @@
     <ItemGroup>
       <Reference Include="Bmb.Domain.Core">
         <HintPath>..\..\..\..\..\..\fiap\projects\bmb.domain.core\src\Bmb.Domain.Core\bin\Debug\net8.0\Bmb.Domain.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Extensions.Diagnostics.HealthChecks">
+        <HintPath>..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.3\Microsoft.Extensions.Diagnostics.HealthChecks.dll</HintPath>
       </Reference>
     </ItemGroup>
 
