@@ -30,6 +30,47 @@ resource "kubernetes_namespace" "payment" {
 # DATABASE
 ##############################
 
+
+resource "aws_dynamodb_table" "payment_orders_replica" {
+  name           = "Payment-OrdersReplica"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "Id"
+  stream_enabled = false
+
+  attribute {
+    name = "Id"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ExpireAt"
+  }
+}
+
+resource "aws_dynamodb_table" "payments_table" {
+  name           = "Payments"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "Id"
+  stream_enabled = false
+
+  attribute {
+    name = "Id"
+    type = "S"
+  }
+  attribute {
+    name = "ExternalReference"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name            = "ExternalReference-index"
+    hash_key        = "ExternalReference"
+    projection_type = "ALL"
+    write_capacity  = 1
+    read_capacity   = 1
+  }
+}
+
 resource "aws_dynamodb_table" "payment_orders_replica" {
   name           = "Payment-OrdersReplica"
   billing_mode   = "PAY_PER_REQUEST"
@@ -71,7 +112,7 @@ resource "aws_dynamodb_table" "payments_table" {
 }
 
 ##############################
-# CONFIGS/SECRETS
+# NAMESPACE
 ##############################
 
 
