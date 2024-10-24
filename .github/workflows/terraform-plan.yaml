@@ -24,7 +24,7 @@ jobs:
 
       - name: Create .auto.tfvars file
         run: |
-          cat <<EOF > tf/api.auto.tfvars
+          cat <<EOF > terraform/api.auto.tfvars
           eks_cluster_name = "${{ vars.BMB_EKS_CLUSTER_NAME }}"
           mercadopago_webhook_secret = "${{ secrets.BMB_MERCADO_PAGO_WH_SECRET}}"
           mercadopago_accesstoken = "${{ secrets.BMB_MERCADO_PAGO_ACCESS_TOKEN }}"
