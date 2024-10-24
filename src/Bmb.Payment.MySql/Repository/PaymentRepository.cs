@@ -39,17 +39,19 @@ public class PaymentRepository(IAmazonDynamoDB database) : IPaymentRepository
 
     public async Task<Domain.Core.Entities.Payment?> GetPaymentAsync(string externalReference, PaymentType paymentType)
     {
-        var request = new ScanRequest
+        var request = new QueryRequest
         {
             TableName = PaymentTable,
-            FilterExpression = "ExternalReference = :externalReference AND PaymentType = :paymentType",
+            IndexName = "ExternalReference-index",
+            KeyConditionExpression = "ExternalReference = :externalReference",
+            FilterExpression = "PaymentType = :paymentType",
             ExpressionAttributeValues = new Dictionary<string, AttributeValue>
             {
                 { ":externalReference", new AttributeValue(externalReference) },
                 { ":paymentType", new AttributeValue(paymentType.ToString()) }
             }
         };
-        var response = await database.ScanAsync(request);
+        var response = await database. QueryAsync(request);
         if (response.Items is null || response.Items.Count == 0)
         {
             return null;
