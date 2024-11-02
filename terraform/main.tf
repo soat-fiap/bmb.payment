@@ -1,3 +1,23 @@
+locals {
+  jwt_issuer            = var.jwt_issuer
+  jwt_aud               = var.jwt_aud
+  docker_image          = var.api_docker_image
+  aws_access_key        = var.api_access_key_id
+  aws_secret_access_key = var.api_secret_access_key
+  aws_region            = "us-east-1"
+  jwt_signing_key       = var.jwt_signing_key
+}
+
+##############################
+# NAMESPACE
+##############################
+
+resource "kubernetes_namespace" "payment" {
+  metadata {
+    name = "fiap-payment"
+  }
+}
+
 ##############################
 # EKS CLUSTER
 ##############################
@@ -51,36 +71,14 @@ resource "aws_dynamodb_table" "payments_table" {
   }
 }
 
-locals {
-  jwt_issuer            = var.jwt_issuer
-  jwt_aud               = var.jwt_aud
-  docker_image          = var.api_docker_image
-  aws_access_key        = var.api_access_key_id
-  aws_secret_access_key = var.api_secret_access_key
-  aws_region            = "us-east-1"
-  jwt_signing_key       = var.jwt_signing_key
-}
-
-
-##############################
-# NAMESPACE
-##############################
-
-resource "kubernetes_namespace" "payment" {
-  metadata {
-    name = "payment"
-  }
-}
-
 ##############################
 # CONFIGS/SECRETS
 ##############################
 
-
 resource "kubernetes_config_map_v1" "config_map_api" {
   metadata {
     name      = "configmap-payment-api"
-    namespace = "payment"
+    namespace = kubernetes_namespace.payment.metadata[0].name
     labels = {
       "app"       = "payment-api"
       "terraform" = true
@@ -89,8 +87,7 @@ resource "kubernetes_config_map_v1" "config_map_api" {
   data = {
     "ASPNETCORE_ENVIRONMENT"               = "Development"
     "MercadoPago__NotificationUrl"         = ""
-    "Serilog__WriteTo__2__Args__serverUrl" = "http://svc-seq:80"
-    "Serilog__WriteTo__2__Args__formatter" = "Serilog.Formatting.Json.JsonFormatter, Serilog"
+    "Serilog__WriteTo__2__Args__serverUrl" = "http://svc-seq.fiap-log.svc.cluster.local"
     "Serilog__Enrich__0"                   = "FromLogContext"
     "HybridCache__Expiration"              = "01:00:00"
     "HybridCache__LocalCacheExpiration"    = "01:00:00"
@@ -99,26 +96,28 @@ resource "kubernetes_config_map_v1" "config_map_api" {
     "JwtOptions__Audience"                 = local.jwt_aud
     "JwtOptions__ExpirationSeconds"        = 3600
     "JwtOptions__UseAccessToken"           = true
-    "JwtOptions__SigningKey"               = local.jwt_signing_key
     "AwsSettings__Region"                  = local.aws_region
     "AwsSettings__ClientSecret"            = local.aws_secret_access_key
     "AwsSettings__ClientId"                = local.aws_access_key
-
   }
 }
 
 resource "kubernetes_secret" "secret_api" {
   metadata {
     name      = "secret-payment-api"
-    namespace = "payment"
+    namespace = kubernetes_namespace.payment.metadata[0].name
     labels = {
       app         = "api-pod"
       "terraform" = true
     }
   }
   data = {
+    "JwtOptions__SigningKey"     = local.jwt_signing_key
     "MercadoPago__WebhookSecret" = var.mercadopago_webhook_secret
     "MercadoPago__AccessToken"   = var.mercadopago_accesstoken
+    "AWS_SECRET_ACCESS_KEY"      = local.aws_secret_access_key
+    "AWS_ACCESS_KEY_ID"          = local.aws_access_key
+    "AWS_DEFAULT_REGION"         = local.aws_region
   }
   type = "Opaque"
 }
@@ -130,7 +129,7 @@ resource "kubernetes_secret" "secret_api" {
 resource "kubernetes_service" "payment-api-svc" {
   metadata {
     name      = var.internal_elb_name
-    namespace = "payment"
+    namespace = kubernetes_namespace.payment.metadata[0].name
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type"   = "nlb"
       "service.beta.kubernetes.io/aws-load-balancer-scheme" = "internal"
@@ -160,7 +159,7 @@ resource "kubernetes_deployment" "deployment_payment_api" {
 
   metadata {
     name      = "deployment-payment-api"
-    namespace = "payment"
+    namespace = kubernetes_namespace.payment.metadata[0].name
     labels = {
       app         = "payment-api"
       "terraform" = true
@@ -243,7 +242,7 @@ resource "kubernetes_deployment" "deployment_payment_api" {
 resource "kubernetes_horizontal_pod_autoscaler_v2" "hpa_api" {
   metadata {
     name      = "hpa-payment-api"
-    namespace = "payment"
+    namespace = kubernetes_namespace.payment.metadata[0].name
   }
   spec {
     max_replicas = 3
@@ -262,89 +261,6 @@ resource "kubernetes_horizontal_pod_autoscaler_v2" "hpa_api" {
         target {
           average_utilization = 65
           type                = "Utilization"
-        }
-      }
-    }
-  }
-}
-
-#################################
-# SEQ
-#################################
-
-resource "kubernetes_service" "svc_seq" {
-  metadata {
-    name      = "svc-seq"
-    namespace = "payment"
-    labels = {
-      "terraform" = true
-    }
-  }
-  spec {
-    type = "NodePort"
-    port {
-      port      = 80
-      node_port = 30008
-    }
-    selector = {
-      app = "seq"
-    }
-  }
-}
-
-resource "kubernetes_deployment" "deployment_seq" {
-  metadata {
-    name      = "deployment-seq"
-    namespace = "payment"
-    labels = {
-      app         = "seq"
-      "terraform" = true
-    }
-  }
-  spec {
-    replicas = 1
-    selector {
-      match_labels = {
-        app = "seq"
-      }
-    }
-    template {
-      metadata {
-        name = "pod-seq"
-        labels = {
-          app         = "seq"
-          "terraform" = true
-        }
-      }
-      spec {
-        automount_service_account_token = false
-        container {
-          name  = "seq-container"
-          image = "datalust/seq:latest"
-          port {
-            container_port = 80
-          }
-          image_pull_policy = "IfNotPresent"
-          env {
-            name  = "ACCEPT_EULA"
-            value = "Y"
-          }
-          resources {
-            requests = {
-              cpu    = "50m"
-              memory = "120Mi"
-            }
-            limits = {
-              cpu    = "100m"
-              memory = "220Mi"
-            }
-          }
-        }
-        volume {
-          name = "dashboards-volume"
-          host_path {
-            path = "/home/docker/seq"
-          }
         }
       }
     }
