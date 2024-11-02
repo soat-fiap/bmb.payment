@@ -21,12 +21,11 @@ provider "aws" {
 }
 
 
-# provider "kubernetes" {
+provider "kubernetes" {
 #   config_path    = "C:\\Users\\italo\\.kube\\config"
 #   config_context = "minikube"
 # }
 
-provider "kubernetes" {
   host                   = data.aws_eks_cluster.techchallenge_cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.techchallenge_cluster.certificate_authority[0].data)
   exec {

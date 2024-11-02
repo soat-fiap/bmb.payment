@@ -1,8 +1,3 @@
-variable "rds_cluster_identifier" {
-  type    = string
-  default = "techchallenge-mysql-default"
-}
-
 variable "profile" {
   description = "AWS profile name"
   type        = string
@@ -49,7 +44,7 @@ variable "jwt_aud" {
 
 variable "api_docker_image" {
   type    = string
-  default = "ghcr.io/soat-fiap/bmb.payment/api:1.0.0"
+  default = "ghcr.io/soat-fiap/bmb.payment/api:1.2.2"
 }
 
 variable "internal_elb_name" {
