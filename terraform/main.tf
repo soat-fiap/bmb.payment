@@ -128,7 +128,7 @@ resource "kubernetes_secret" "secret_api" {
 
 resource "kubernetes_service" "payment-api-svc" {
   metadata {
-    name      = var.internal_elb_name
+    name      = "api-internal"
     namespace = kubernetes_namespace.payment.metadata[0].name
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type"   = "nlb"
