@@ -50,7 +50,7 @@ variable "jwt_aud" {
 
 variable "api_docker_image" {
   type    = string
-  default = "ghcr.io/soat-fiap/bmb.payment/api:1.2.2"
+  default = "ghcr.io/soat-fiap/bmb.payment/api:1.2.3"
 }
 
 variable "internal_elb_name" {
