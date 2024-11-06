@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Bmb.Domain.Core.Events;
 using Bmb.Payment.Core.Contracts;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;

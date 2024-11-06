@@ -1,5 +1,6 @@
 using AutoFixture;
 using Bmb.Domain.Core.Base;
+using Bmb.Domain.Core.Events;
 using Bmb.Domain.Core.Events.Notifications;
 using Bmb.Payment.Application.UseCases;
 using Bmb.Payment.Core;
