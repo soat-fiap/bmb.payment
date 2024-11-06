@@ -1,4 +1,5 @@
 using Bmb.Domain.Core.Base;
+using Bmb.Domain.Core.Events;
 using Bmb.Domain.Core.Events.Notifications;
 using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Core;

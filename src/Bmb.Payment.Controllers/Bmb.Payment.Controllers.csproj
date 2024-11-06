@@ -12,8 +12,4 @@
       <ProjectReference Include="..\Bmb.Payment.MercadoPago.Gateway\Bmb.Payment.MercadoPago.Gateway.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Bmb.Domain.Core" Version="0.0.3" />
-    </ItemGroup>
-
 </Project>
