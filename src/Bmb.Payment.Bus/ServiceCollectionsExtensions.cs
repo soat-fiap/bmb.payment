@@ -14,7 +14,7 @@ public static class ServiceCollectionsExtensions
     {
         services.AddMassTransit(bus =>
         {
-            bus.AddConsumer<OrderCreatedConsumer>();
+            bus.AddConsumer<OrderCreatedPaymentConsumer>();
             bus.UsingAmazonSqs((context, cfg) =>
             {
                 cfg.Host("us-east-1", h =>

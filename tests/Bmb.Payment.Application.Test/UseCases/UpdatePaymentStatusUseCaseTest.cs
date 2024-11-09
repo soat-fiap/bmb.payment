@@ -1,4 +1,6 @@
 using AutoFixture;
+using Bmb.Domain.Core.Events;
+using Bmb.Domain.Core.Events.Notifications;
 using Bmb.Payment.Application.UseCases;
 using Bmb.Payment.Core.Contracts;
 
@@ -9,11 +11,13 @@ public class UpdatePaymentStatusUseCaseTest
 {
     private readonly Mock<IPaymentRepository> _mockPaymentRepository;
     private readonly UpdatePaymentStatusUseCase _target;
+     private readonly Mock<IDispatcher> _dispatcher;
 
     public UpdatePaymentStatusUseCaseTest()
     {
         _mockPaymentRepository = new Mock<IPaymentRepository>();
-        _target = new UpdatePaymentStatusUseCase(_mockPaymentRepository.Object);
+        _dispatcher = new Mock<IDispatcher>();
+        _target = new UpdatePaymentStatusUseCase(_mockPaymentRepository.Object , _dispatcher.Object);
     }
 
     [Fact]
@@ -35,8 +39,8 @@ public class UpdatePaymentStatusUseCaseTest
         using (new AssertionScope())
         {
             result.Should().BeTrue();
-            // _mockUpdateOrderStatusUseCase.Verify(uc => uc.Execute(It.IsAny<Guid>(), It.IsAny<OrderStatus>()),
-            //     Times.Once);
+            _dispatcher.VerifyAll();
+            _dispatcher.Verify(d => d.PublishAsync(It.IsAny<OrderPaymentConfirmed>(), It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }
