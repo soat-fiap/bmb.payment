@@ -8,18 +8,18 @@ using Moq;
 
 namespace Bmb.Payment.Bus.Test;
 
-[TestSubject(typeof(OrderCreatedConsumer))]
-public class OrderCreatedConsumerTest
+[TestSubject(typeof(OrderCreatedPaymentConsumer))]
+public class OrderCreatedPaymentConsumerTest
 {
-    private readonly Mock<ILogger<OrderCreatedConsumer>> _loggerMock;
+    private readonly Mock<ILogger<OrderCreatedPaymentConsumer>> _loggerMock;
     private readonly Mock<IOrdersGateway> _ordersGatewayMock;
-    private readonly OrderCreatedConsumer _consumer;
+    private readonly OrderCreatedPaymentConsumer _consumer;
 
-    public OrderCreatedConsumerTest()
+    public OrderCreatedPaymentConsumerTest()
     {
-        _loggerMock = new Mock<ILogger<OrderCreatedConsumer>>();
+        _loggerMock = new Mock<ILogger<OrderCreatedPaymentConsumer>>();
         _ordersGatewayMock = new Mock<IOrdersGateway>();
-        _consumer = new OrderCreatedConsumer(_loggerMock.Object, _ordersGatewayMock.Object);
+        _consumer = new OrderCreatedPaymentConsumer(_loggerMock.Object, _ordersGatewayMock.Object);
     }
 
     [Fact]

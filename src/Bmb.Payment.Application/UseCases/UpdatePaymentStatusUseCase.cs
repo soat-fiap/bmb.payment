@@ -1,3 +1,5 @@
+using Bmb.Domain.Core.Events;
+using Bmb.Domain.Core.Events.Notifications;
 using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Core.Contracts;
 
@@ -6,10 +8,12 @@ namespace Bmb.Payment.Application.UseCases;
 public class UpdatePaymentStatusUseCase : IUpdatePaymentStatusUseCase
 {
     private readonly IPaymentRepository _paymentRepository;
+    private readonly IDispatcher _dispatcher;
 
-    public UpdatePaymentStatusUseCase(IPaymentRepository paymentRepository)
+    public UpdatePaymentStatusUseCase(IPaymentRepository paymentRepository, IDispatcher dispatcher)
     {
         _paymentRepository = paymentRepository;
+        _dispatcher = dispatcher;
     }
 
     public async Task<bool> Execute(Bmb.Domain.Core.Entities.Payment? payment, PaymentStatus status)
@@ -26,9 +30,8 @@ public class UpdatePaymentStatusUseCase : IUpdatePaymentStatusUseCase
 
             if (paymentStatusUpdated && payment.IsApproved())
             {
-                // DomainEventTrigger.RaisePaymentConfirmed(payment);
-                // TODO MassTransit 
-                // await _updateOrderStatusUseCase.Execute(payment.OrderId, OrderStatus.Received);
+                await _dispatcher.PublishAsync(new OrderPaymentConfirmed(payment.Id,
+                    payment.OrderId));
             }
 
             return paymentStatusUpdated;
