@@ -1,8 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Amazon;
 using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
-using Amazon.Runtime;
 using Bmb.Orders.Gateway;
 using Bmb.Payment.Application;
 using Bmb.Payment.Controllers;
@@ -14,8 +11,6 @@ using Bmb.Payment.MySql;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using AwsSettings = Bmb.Orders.Gateway.AwsSettings;
 
 namespace Bmb.Payment.DI;
 
@@ -65,12 +60,6 @@ public static class ServiceCollectionsExtensions
 
     private static void AddDynamoDbConnection(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IAmazonDynamoDB>(_ =>
-        {
-            var dynamoDbSettings = configuration.GetSection("AwsSettings").Get<AwsSettings>();
-            return new AmazonDynamoDBClient(
-                new BasicAWSCredentials(dynamoDbSettings!.ClientId, dynamoDbSettings.ClientSecret),
-                RegionEndpoint.GetBySystemName(dynamoDbSettings.Region));
-        });
+        services.AddScoped<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient());
     }
 }   

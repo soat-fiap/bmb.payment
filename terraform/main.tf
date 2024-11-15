@@ -102,6 +102,7 @@ resource "kubernetes_secret" "secret_api" {
   }
   data = {
     "JwtOptions__SigningKey"     = local.jwt_signing_key
+    "JwtOptions__SigningKey"     = local.jwt_signing_key
     "MercadoPago__WebhookSecret" = var.mercadopago_webhook_secret
     "MercadoPago__AccessToken"   = var.mercadopago_accesstoken
     "AWS_SECRET_ACCESS_KEY"      = local.aws_secret_access_key
