@@ -19,17 +19,8 @@ resource "kubernetes_namespace" "payment" {
 }
 
 ##############################
-# EKS CLUSTER
-##############################
-
-data "aws_eks_cluster" "techchallenge_cluster" {
-  name = var.eks_cluster_name
-}
-
-##############################
 # DATABASE
 ##############################
-
 
 resource "aws_dynamodb_table" "payment_orders_replica" {
   name           = "Payment-OrdersReplica"
@@ -69,6 +60,10 @@ resource "aws_dynamodb_table" "payments_table" {
     write_capacity  = 1
     read_capacity   = 1
   }
+
+  lifecycle {
+    ignore_changes = [global_secondary_index]
+  }
 }
 
 ##############################
@@ -87,18 +82,12 @@ resource "kubernetes_config_map_v1" "config_map_api" {
   data = {
     "ASPNETCORE_ENVIRONMENT"               = "Development"
     "MercadoPago__NotificationUrl"         = ""
-    "Serilog__WriteTo__2__Args__serverUrl" = "http://svc-seq.fiap-log.svc.cluster.local"
+    "Serilog__WriteTo__2__Args__serverUrl" = "http://api-internal.fiap-log.svc.cluster.local"
     "Serilog__Enrich__0"                   = "FromLogContext"
-    "HybridCache__Expiration"              = "01:00:00"
-    "HybridCache__LocalCacheExpiration"    = "01:00:00"
-    "HybridCache__Flags"                   = "DisableDistributedCache"
     "JwtOptions__Issuer"                   = local.jwt_issuer
     "JwtOptions__Audience"                 = local.jwt_aud
     "JwtOptions__ExpirationSeconds"        = 3600
     "JwtOptions__UseAccessToken"           = true
-    "AwsSettings__Region"                  = local.aws_region
-    "AwsSettings__ClientSecret"            = local.aws_secret_access_key
-    "AwsSettings__ClientId"                = local.aws_access_key
   }
 }
 
@@ -113,11 +102,12 @@ resource "kubernetes_secret" "secret_api" {
   }
   data = {
     "JwtOptions__SigningKey"     = local.jwt_signing_key
+    "JwtOptions__SigningKey"     = local.jwt_signing_key
     "MercadoPago__WebhookSecret" = var.mercadopago_webhook_secret
     "MercadoPago__AccessToken"   = var.mercadopago_accesstoken
     "AWS_SECRET_ACCESS_KEY"      = local.aws_secret_access_key
     "AWS_ACCESS_KEY_ID"          = local.aws_access_key
-    "AWS_DEFAULT_REGION"         = local.aws_region
+    "AWS_REGION"                 = local.aws_region
   }
   type = "Opaque"
 }
@@ -139,7 +129,7 @@ resource "kubernetes_service" "payment-api-svc" {
     port {
       port        = 80
       target_port = 8080
-      node_port   = 30000
+      node_port   = 30002
       protocol    = "TCP"
     }
     type = "LoadBalancer"

@@ -1,8 +1,3 @@
-variable "rds_cluster_identifier" {
-  type    = string
-  default = "techchallenge-mysql-default"
-}
-
 variable "profile" {
   description = "AWS profile name"
   type        = string
