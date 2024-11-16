@@ -1,4 +1,4 @@
-using Bmb.Payment.Api.Auth;
+using Bmb.Auth;
 using Bmb.Payment.Api.Model;
 using Bmb.Payment.Controllers.Contracts;
 using Bmb.Payment.Controllers.Dto;

@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Bmb.Payment.Api.Auth;
+using Bmb.Auth;
 using Bmb.Payment.Masstransit;
 using Bmb.Payment.DI;
 using HealthChecks.UI.Client;
