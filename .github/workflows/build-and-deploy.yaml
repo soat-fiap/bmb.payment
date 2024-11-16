@@ -9,6 +9,7 @@ on:
       - '.gitignore'
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
@@ -101,13 +102,23 @@ jobs:
       
       - name: Release
         id: semantic-release
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: | 
+        run: |
           npx semantic-release
-          VERSION=$(cat VERSION)
-          echo "Resolved version: $VERSION"
+          if [ -f VERSION ]; then
+            VERSION=$(cat VERSION)
+          else
+            echo "VERSION file not found, getting latest version from latest release"
+            VERSION=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name' | sed 's/v//')
+          fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          if [ $? -ne 0 ]; then
+            echo "Release failed, getting latest version from lates release"	
+            echo "version=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name' | sed 's/v//')" >> $GITHUB_OUTPUT
+          fi
 
   build-docker-image:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
