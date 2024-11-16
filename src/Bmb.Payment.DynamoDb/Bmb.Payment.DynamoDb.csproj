@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <InternalsVisibleTo Include="Bmb.Payment.MySql.Test" />
+      <InternalsVisibleTo Include="Bmb.Payment.DynamoDb.Test" />
       <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     </ItemGroup>
 

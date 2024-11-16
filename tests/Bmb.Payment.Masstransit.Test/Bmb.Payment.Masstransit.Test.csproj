@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Bmb.Payment.Bus\Bmb.Payment.Bus.csproj" />
+      <ProjectReference Include="..\..\src\Bmb.Payment.Masstransit\Bmb.Payment.Masstransit.csproj" />
     </ItemGroup>
 
     <ItemGroup>

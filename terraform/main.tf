@@ -36,6 +36,10 @@ resource "aws_dynamodb_table" "payment_orders_replica" {
   ttl {
     attribute_name = "ExpireAt"
   }
+
+  lifecycle {
+    ignore_changes = [ttl]
+  }
 }
 
 resource "aws_dynamodb_table" "payments_table" {

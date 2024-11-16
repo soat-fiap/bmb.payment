@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Bmb.Payment.MySql\Bmb.Payment.MySql.csproj" />
+      <ProjectReference Include="..\..\src\Bmb.Payment.DynamoDb\Bmb.Payment.DynamoDb.csproj" />
     </ItemGroup>
 
 </Project>

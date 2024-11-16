@@ -1,7 +1,7 @@
 using Amazon.DynamoDBv2.Model;
 using Bmb.Domain.Core.ValueObjects;
 
-namespace Bmb.Payment.MySql;
+namespace Bmb.Payment.DynamoDb;
 
 public static class Presenter
 {

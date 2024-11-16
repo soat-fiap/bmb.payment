@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Bmb.Payment.MySql.Dto;
+namespace Bmb.Payment.DynamoDb.Dto;
 
 [ExcludeFromCodeCoverage]
 public class PaymentDto

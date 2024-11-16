@@ -4,7 +4,7 @@ using Bmb.Payment.Core.Contracts;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
-namespace Bmb.Payment.Bus;
+namespace Bmb.Payment.Masstransit;
 
 public class Dispatcher : IDispatcher
 {

@@ -3,7 +3,7 @@ using Bmb.Domain.Core.Entities;
 using Bmb.Domain.Core.Interfaces;
 using Bmb.Domain.Core.ValueObjects;
 
-namespace Bmb.Payment.MySql.Repository;
+namespace Bmb.Payment.DynamoDb.Repository;
 
 [ExcludeFromCodeCoverage]
 public class InMemoryPaymentRepository : IPaymentRepository

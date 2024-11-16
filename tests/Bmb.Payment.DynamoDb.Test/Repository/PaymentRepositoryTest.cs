@@ -2,13 +2,13 @@ using System.Net;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using AutoFixture;
-using Bmb.Payment.MySql.Repository;
+using Bmb.Payment.DynamoDb.Repository;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using JetBrains.Annotations;
 using Moq;
 
-namespace Bmb.Payment.MySql.Test.Repository;
+namespace Bmb.Payment.DynamoDb.Test.Repository;
 
 [TestSubject(typeof(PaymentRepository))]
 public class PaymentRepositoryTest

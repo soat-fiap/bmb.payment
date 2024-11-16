@@ -7,7 +7,7 @@ using Bmb.Payment.Core.Contracts;
 using Bmb.Payment.DI.HealthChecks;
 using Bmb.Payment.FakePayment.Gateway;
 using Bmb.Payment.MercadoPago.Gateway;
-using Bmb.Payment.MySql;
+using Bmb.Payment.DynamoDb;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

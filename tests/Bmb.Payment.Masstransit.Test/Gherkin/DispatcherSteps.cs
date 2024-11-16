@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit.Gherkin.Quick;
 
-namespace Bmb.Payment.Bus.Test.Gherkin;
+namespace Bmb.Payment.Masstransit.Test.Gherkin;
 
 [FeatureFile("./Gherkin/Dispatcher.feature")]
 public class DispatcherSteps : Feature

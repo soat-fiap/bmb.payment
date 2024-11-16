@@ -5,7 +5,7 @@ using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Bmb.Payment.Bus;
+namespace Bmb.Payment.Masstransit;
 
 [ExcludeFromCodeCoverage]
 public static class ServiceCollectionsExtensions
