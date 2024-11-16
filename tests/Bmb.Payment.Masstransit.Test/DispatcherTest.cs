@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using static Moq.It;
 
-namespace Bmb.Payment.Bus.Test
+namespace Bmb.Payment.Masstransit.Test
 {
     [TestSubject(typeof(Dispatcher))]
     public class DispatcherTest

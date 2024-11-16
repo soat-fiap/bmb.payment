@@ -17,7 +17,7 @@
       <ProjectReference Include="..\Bmb.Orders.Gateway\Bmb.Orders.Gateway.csproj" />
       <ProjectReference Include="..\Bmb.Payment.Application\Bmb.Payment.Application.csproj" />
       <ProjectReference Include="..\Bmb.Payment.Controllers\Bmb.Payment.Controllers.csproj" />
-      <ProjectReference Include="..\Bmb.Payment.MySql\Bmb.Payment.MySql.csproj" />
+      <ProjectReference Include="..\Bmb.Payment.DynamoDb\Bmb.Payment.DynamoDb.csproj" />
     </ItemGroup>
 
     <ItemGroup>

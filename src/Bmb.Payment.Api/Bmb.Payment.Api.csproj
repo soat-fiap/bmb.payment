@@ -39,7 +39,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Bmb.Payment.Bus\Bmb.Payment.Bus.csproj" />
+      <ProjectReference Include="..\Bmb.Payment.Masstransit\Bmb.Payment.Masstransit.csproj" />
       <ProjectReference Include="..\Bmb.Payment.Controllers\Bmb.Payment.Controllers.csproj" />
       <ProjectReference Include="..\Bmb.Payment.DI\Bmb.Payment.DI.csproj" />
     </ItemGroup>

@@ -3,7 +3,7 @@ using Bmb.Payment.Core;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
-namespace Bmb.Payment.Bus;
+namespace Bmb.Payment.Masstransit;
 
 public class OrderCreatedPaymentConsumer(ILogger<OrderCreatedPaymentConsumer> logger, IOrdersGateway ordersGateway)
     : IConsumer<OrderCreated>

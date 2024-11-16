@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Application", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Orders.Gateway", "src\Bmb.Orders.Gateway\Bmb.Orders.Gateway.csproj", "{7BEEBD25-6E2D-4BA0-9287-39EC9820CABF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.MySql", "src\Bmb.Payment.MySql\Bmb.Payment.MySql.csproj", "{9D4D796E-C202-4846-BC65-79D4FA63A136}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.DynamoDb", "src\Bmb.Payment.DynamoDb\Bmb.Payment.DynamoDb.csproj", "{9D4D796E-C202-4846-BC65-79D4FA63A136}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Controllers", "src\Bmb.Payment.Controllers\Bmb.Payment.Controllers.csproj", "{E0854783-7998-4B83-BCF3-E4A5EBB24CD0}"
 EndProject
@@ -36,13 +36,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Api.Test", "tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Orders.Gateway.Test", "tests\Bmb.Orders.Gateway.Test\Bmb.Orders.Gateway.Test.csproj", "{3220452F-8B8D-476C-962F-CAE2A2D76F44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.MySql.Test", "tests\Bmb.Payment.MySql.Test\Bmb.Payment.MySql.Test.csproj", "{C5464D10-B602-4B01-A14C-560536BB9563}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.DynamoDb.Test", "tests\Bmb.Payment.DynamoDb.Test\Bmb.Payment.DynamoDb.Test.csproj", "{C5464D10-B602-4B01-A14C-560536BB9563}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Core", "src\Bmb.Payment.Core\Bmb.Payment.Core.csproj", "{C616857B-CB67-4904-9787-4FC78963CE50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Bus", "src\Bmb.Payment.Bus\Bmb.Payment.Bus.csproj", "{FA002C5A-0B24-4986-BA44-A9E09A8BA553}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Masstransit", "src\Bmb.Payment.Masstransit\Bmb.Payment.Masstransit.csproj", "{FA002C5A-0B24-4986-BA44-A9E09A8BA553}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Bus.Test", "tests\Bmb.Payment.Bus.Test\Bmb.Payment.Bus.Test.csproj", "{80086F76-F1F6-466B-9241-4E5E99DCB12E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Masstransit.Test", "tests\Bmb.Payment.Masstransit.Test\Bmb.Payment.Masstransit.Test.csproj", "{80086F76-F1F6-466B-9241-4E5E99DCB12E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

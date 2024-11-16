@@ -6,7 +6,7 @@ using MassTransit;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Bmb.Payment.Bus.Test;
+namespace Bmb.Payment.Masstransit.Test;
 
 [TestSubject(typeof(OrderCreatedPaymentConsumer))]
 public class OrderCreatedPaymentConsumerTest

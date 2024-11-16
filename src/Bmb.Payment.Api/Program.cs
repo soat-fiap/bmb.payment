@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using Bmb.Payment.Api.Auth;
-using Bmb.Payment.Bus;
+using Bmb.Payment.Masstransit;
 using Bmb.Payment.DI;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;

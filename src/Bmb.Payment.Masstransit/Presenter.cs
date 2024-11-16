@@ -1,7 +1,7 @@
 using Bmb.Domain.Core.Events.Integration;
 using Bmb.Payment.Core;
 
-namespace Bmb.Payment.Bus;
+namespace Bmb.Payment.Masstransit;
 
 internal static class Presenter
 {

@@ -1,10 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using Bmb.Payment.Core.Contracts;
-using Bmb.Payment.MySql.Repository;
+using Bmb.Payment.DynamoDb.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bmb.Payment.MySql;
+namespace Bmb.Payment.DynamoDb;
 
 [ExcludeFromCodeCoverage]
 public static class ServiceExtensions

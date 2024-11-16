@@ -4,7 +4,7 @@ using Amazon.DynamoDBv2.Model;
 using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Core.Contracts;
 
-namespace Bmb.Payment.MySql.Repository;
+namespace Bmb.Payment.DynamoDb.Repository;
 
 public class PaymentRepository(IAmazonDynamoDB database) : IPaymentRepository
 {
