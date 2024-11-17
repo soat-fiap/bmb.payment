@@ -1,8 +1,8 @@
-using Bmb.Domain.Core.ValueObjects;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.Application.UseCases;
 
 public interface IUpdatePaymentStatusUseCase
 {
-    Task<bool> Execute(Bmb.Domain.Core.Entities.Payment? payment, PaymentStatus status);
+    Task<bool> Execute(Domain.Entities.Payment? payment, PaymentStatus status);
 }

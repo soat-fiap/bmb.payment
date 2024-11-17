@@ -2,7 +2,8 @@ using System.Net;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Bmb.Domain.Core.ValueObjects;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.DynamoDb.Repository;
 
@@ -10,13 +11,13 @@ public class PaymentRepository(IAmazonDynamoDB database) : IPaymentRepository
 {
     private const string PaymentTable = "Payments";
 
-    public async Task<Domain.Core.Entities.Payment> SaveAsync(Domain.Core.Entities.Payment payment)
+    public async Task<Domain.Entities.Payment> SaveAsync(Domain.Entities.Payment payment)
     {
         await database.PutItemAsync(PaymentTable, payment.ToDynamoDbItem());
         return payment;
     }
 
-    public async Task<Domain.Core.Entities.Payment?> GetPaymentAsync(PaymentId paymentId)
+    public async Task<Domain.Entities.Payment?> GetPaymentAsync(PaymentId paymentId)
     {
         var request = new GetItemRequest
         {
@@ -37,7 +38,7 @@ public class PaymentRepository(IAmazonDynamoDB database) : IPaymentRepository
         return response.Item.ToDomain();
     }
 
-    public async Task<Domain.Core.Entities.Payment?> GetPaymentAsync(string externalReference, PaymentType paymentType)
+    public async Task<Domain.Entities.Payment?> GetPaymentAsync(string externalReference, PaymentType paymentType)
     {
         var request = new QueryRequest
         {
@@ -60,7 +61,7 @@ public class PaymentRepository(IAmazonDynamoDB database) : IPaymentRepository
         return response.Items[0].ToDomain();
     }
 
-    public async Task<bool> UpdatePaymentStatusAsync(Domain.Core.Entities.Payment payment)
+    public async Task<bool> UpdatePaymentStatusAsync(Domain.Entities.Payment payment)
     {
         var attributes = payment.ToDynamoDbItem();
         attributes.Remove("Id");

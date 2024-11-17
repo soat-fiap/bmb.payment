@@ -26,7 +26,7 @@ public class PaymentRepositoryTest
     public async Task Create_Success()
     {
         // Arrange
-        var expectedPayment = new Fixture().Create<Domain.Core.Entities.Payment>();
+        var expectedPayment = new Fixture().Create<Domain.Entities.Payment>();
 
         _mockDynamoDb.Setup(c => c.PutItemAsync(It.IsAny<PutItemRequest>(), default))
             .ReturnsAsync(new PutItemResponse { HttpStatusCode = HttpStatusCode.OK });
@@ -46,7 +46,7 @@ public class PaymentRepositoryTest
     public async Task GetPaymentAsync_Success()
     {
         // Arrange
-        var expectedPayment = new Fixture().Create<Domain.Core.Entities.Payment>();
+        var expectedPayment = new Fixture().Create<Domain.Entities.Payment>();
 
         _mockDynamoDb.Setup(c => c.GetItemAsync(It.IsAny<GetItemRequest>(), default))
             .ReturnsAsync(new GetItemResponse
@@ -69,7 +69,7 @@ public class PaymentRepositoryTest
     public async Task GetPaymentAsync_ExternalReference_Success()
     {
         // Arrange
-        var expectedPayment = new Fixture().Create<Domain.Core.Entities.Payment>();
+        var expectedPayment = new Fixture().Create<Domain.Entities.Payment>();
 
         _mockDynamoDb.Setup(c => c.QueryAsync(It.IsAny<QueryRequest>(), default))
             .ReturnsAsync(new QueryResponse
@@ -95,7 +95,7 @@ public class PaymentRepositoryTest
     public async Task UpdatePaymentStatusAsync_Success()
     {
         // Arrange
-        var payment = new Fixture().Create<Domain.Core.Entities.Payment>();
+        var payment = new Fixture().Create<Domain.Entities.Payment>();
 
         _mockDynamoDb.Setup(c => c.UpdateItemAsync(It.IsAny<UpdateItemRequest>(), default))
             .ReturnsAsync(new UpdateItemResponse { HttpStatusCode = HttpStatusCode.OK });

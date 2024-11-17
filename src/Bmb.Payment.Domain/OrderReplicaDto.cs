@@ -1,6 +1,6 @@
 using Bmb.Domain.Core.ValueObjects;
 
-namespace Bmb.Payment.Core;
+namespace Bmb.Payment.Domain;
 
 public record OrderReplicaDto(Guid OrderId, OrderDto OrderDetails);
 

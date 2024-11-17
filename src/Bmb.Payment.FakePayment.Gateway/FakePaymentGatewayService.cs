@@ -1,17 +1,18 @@
 using System.Diagnostics.CodeAnalysis;
 using Bmb.Domain.Core.ValueObjects;
-using Bmb.Payment.Core;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain;
+using Bmb.Payment.Domain.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.FakePayment.Gateway;
 
 [ExcludeFromCodeCoverage]
 public class FakePaymentGatewayService : IPaymentGateway
 {
-    public Task<Domain.Core.Entities.Payment> CreatePaymentAsync(OrderDto order)
+    public Task<Domain.Entities.Payment> CreatePaymentAsync(OrderDto order)
     {
         var id = Guid.NewGuid();
-        return Task.FromResult(new Domain.Core.Entities.Payment
+        return Task.FromResult(new Domain.Entities.Payment
         {
             Id = new PaymentId(id),
             OrderId = order.Id,

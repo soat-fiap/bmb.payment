@@ -13,7 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Bmb.Orders.Gateway\Bmb.Orders.Gateway.csproj" />
-      <ProjectReference Include="..\Bmb.Payment.Core\Bmb.Payment.Core.csproj" />
+      <ProjectReference Include="..\Bmb.Payment.Domain\Bmb.Payment.Domain.csproj" />
     </ItemGroup>
     
     <ItemGroup>

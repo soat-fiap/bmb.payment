@@ -1,6 +1,6 @@
 using Bmb.Payment.Api.Model;
 using Bmb.Payment.Controllers.Dto;
-using PaymentType = Bmb.Domain.Core.ValueObjects.PaymentType;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.Api;
 

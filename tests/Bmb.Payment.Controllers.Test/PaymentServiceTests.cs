@@ -2,11 +2,13 @@ using AutoFixture;
 using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Application.UseCases;
 using Bmb.Payment.Controllers.Dto;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain.Contracts;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using JetBrains.Annotations;
 using Moq;
+using PaymentStatus = Bmb.Payment.Domain.ValueObjects.PaymentStatus;
+using PaymentType = Bmb.Payment.Domain.ValueObjects.PaymentType;
 
 namespace Bmb.Payment.Controllers.Test;
 
@@ -39,7 +41,7 @@ public class PaymentServiceTests
     {
         // Arrange
         _mockCreatePaymentUseCase.Setup(p => p.Execute(It.IsAny<Guid>(), It.IsAny<PaymentType>()))
-            .ReturnsAsync(new Fixture().Create<Domain.Core.Entities.Payment>());
+            .ReturnsAsync(new Fixture().Create<Domain.Entities.Payment>());
         var createOrderPaymentRequestDto = new CreateOrderPaymentRequestDto(Guid.NewGuid(), PaymentType.Test);
 
         // Act
@@ -49,7 +51,7 @@ public class PaymentServiceTests
         using (new AssertionScope())
         {
             result.Should().NotBeNull();
-            _mockPaymentRepository.Verify(r => r.SaveAsync(It.IsAny<Domain.Core.Entities.Payment>()), Times.Once);
+            _mockPaymentRepository.Verify(r => r.SaveAsync(It.IsAny<Bmb.Payment.Domain.Entities.Payment>()), Times.Once);
         }
     }
 
@@ -57,7 +59,7 @@ public class PaymentServiceTests
     public async Task GetPaymentAsync_Success()
     {
         // Arrange
-        var expectedPayment = new Fixture().Create<Domain.Core.Entities.Payment>();
+        var expectedPayment = new Fixture().Create<Domain.Entities.Payment>();
         _mockPaymentRepository.Setup(p => p.GetPaymentAsync(It.IsAny<PaymentId>()))
             .ReturnsAsync(expectedPayment)
             .Verifiable();
@@ -78,7 +80,7 @@ public class PaymentServiceTests
     public async Task SyncPaymentStatusWithGatewayAsync_Success()
     {
         // Arrange
-        var expectedPayment = new Fixture().Create<Domain.Core.Entities.Payment>();
+        var expectedPayment = new Fixture().Create<Domain.Entities.Payment>();
         _mockPaymentRepository.Setup(p => p.GetPaymentAsync(It.IsAny<string>(), It.IsAny<PaymentType>()))
             .ReturnsAsync(expectedPayment)
             .Verifiable();

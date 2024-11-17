@@ -38,7 +38,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Orders.Gateway.Test", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.DynamoDb.Test", "tests\Bmb.Payment.DynamoDb.Test\Bmb.Payment.DynamoDb.Test.csproj", "{C5464D10-B602-4B01-A14C-560536BB9563}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Core", "src\Bmb.Payment.Core\Bmb.Payment.Core.csproj", "{C616857B-CB67-4904-9787-4FC78963CE50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Domain", "src\Bmb.Payment.Domain\Bmb.Payment.Domain.csproj", "{C616857B-CB67-4904-9787-4FC78963CE50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bmb.Payment.Masstransit", "src\Bmb.Payment.Masstransit\Bmb.Payment.Masstransit.csproj", "{FA002C5A-0B24-4986-BA44-A9E09A8BA553}"
 EndProject

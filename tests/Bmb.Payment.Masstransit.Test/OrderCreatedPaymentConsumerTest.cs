@@ -1,6 +1,6 @@
 using AutoFixture;
 using Bmb.Domain.Core.Events.Integration;
-using Bmb.Payment.Core;
+using Bmb.Payment.Domain;
 using JetBrains.Annotations;
 using MassTransit;
 using Microsoft.Extensions.Logging;

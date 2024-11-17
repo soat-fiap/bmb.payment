@@ -2,8 +2,9 @@ using Bmb.Domain.Core.Base;
 using Bmb.Domain.Core.Events;
 using Bmb.Domain.Core.Events.Notifications;
 using Bmb.Domain.Core.ValueObjects;
-using Bmb.Payment.Core;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain;
+using Bmb.Payment.Domain.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.Application.UseCases;
 
@@ -22,7 +23,7 @@ public class CreatePaymentUseCase : ICreatePaymentUseCase
         _dispatcher = dispatcher;
     }
 
-    public async Task<Bmb.Domain.Core.Entities.Payment?> Execute(Guid orderId, PaymentType paymentType)
+    public async Task<Domain.Entities.Payment?> Execute(Guid orderId, PaymentType paymentType)
     {
         var order = await _ordersGateway.GetCopyAsync(orderId);
 

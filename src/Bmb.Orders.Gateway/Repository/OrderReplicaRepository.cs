@@ -2,7 +2,7 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Bmb.Domain.Core.Base;
 using Bmb.Domain.Core.Entities;
-using Bmb.Payment.Core;
+using Bmb.Payment.Domain;
 
 namespace Bmb.Orders.Gateway.Repository;
 

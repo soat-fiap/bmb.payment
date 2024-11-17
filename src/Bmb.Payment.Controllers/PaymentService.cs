@@ -2,7 +2,8 @@ using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Application.UseCases;
 using Bmb.Payment.Controllers.Contracts;
 using Bmb.Payment.Controllers.Dto;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.Controllers;
 

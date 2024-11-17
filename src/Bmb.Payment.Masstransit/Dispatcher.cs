@@ -1,6 +1,6 @@
 using Bmb.Domain.Core.Events;
+using Bmb.Domain.Core.Events.Integration;
 using Bmb.Domain.Core.Events.Notifications;
-using Bmb.Payment.Core.Contracts;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
@@ -31,5 +31,10 @@ public class Dispatcher : IDispatcher
             _logger.LogError(e, "Error when trying to publish event: {Event}", @event);
             throw;
         }
+    }
+
+    public Task PublishIntegrationAsync<T>(T @event, CancellationToken cancellationToken = new CancellationToken()) where T : IBmbIntegrationEvent
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,6 +1,6 @@
 using Bmb.Domain.Core.Entities;
 
-namespace Bmb.Payment.Core;
+namespace Bmb.Payment.Domain;
 
 public interface IOrdersGateway
 {

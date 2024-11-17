@@ -3,7 +3,7 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using AutoFixture;
 using Bmb.Orders.Gateway.Repository;
-using Bmb.Payment.Core;
+using Bmb.Payment.Domain;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using JetBrains.Annotations;

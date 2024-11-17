@@ -2,7 +2,8 @@ using AutoFixture;
 using Bmb.Domain.Core.Events;
 using Bmb.Domain.Core.Events.Notifications;
 using Bmb.Payment.Application.UseCases;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.Application.Test.UseCases;
 
@@ -24,11 +25,11 @@ public class UpdatePaymentStatusUseCaseTest
     public async void Execute_UpdatePaymentAndOrderStatus_Success()
     {
         // Arrange
-        var payment = new Fixture().Create<Bmb.Domain.Core.Entities.Payment>();
+        var payment = new Fixture().Create<Domain.Entities.Payment>();
         var newStatus = PaymentStatus.Approved;
 
         _mockPaymentRepository.Setup(p =>
-                p.UpdatePaymentStatusAsync(It.Is<Bmb.Domain.Core.Entities.Payment>(x => x.Status == newStatus)))
+                p.UpdatePaymentStatusAsync(It.Is<Domain.Entities.Payment>(x => x.Status == newStatus)))
             .ReturnsAsync(true)
             .Verifiable();
 

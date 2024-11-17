@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Bmb.Orders.Gateway.Repository;
-using Bmb.Payment.Core;
+using Bmb.Payment.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

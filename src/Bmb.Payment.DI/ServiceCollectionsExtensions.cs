@@ -3,7 +3,7 @@ using Amazon.DynamoDBv2;
 using Bmb.Orders.Gateway;
 using Bmb.Payment.Application;
 using Bmb.Payment.Controllers;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain.Contracts;
 using Bmb.Payment.DI.HealthChecks;
 using Bmb.Payment.FakePayment.Gateway;
 using Bmb.Payment.MercadoPago.Gateway;

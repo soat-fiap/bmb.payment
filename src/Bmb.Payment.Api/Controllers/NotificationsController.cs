@@ -1,6 +1,6 @@
-using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Api.Auth;
 using Bmb.Payment.Controllers.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 using Bmb.Payment.MercadoPago.Gateway.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
