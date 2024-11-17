@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain.Contracts;
 using Bmb.Payment.DynamoDb.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

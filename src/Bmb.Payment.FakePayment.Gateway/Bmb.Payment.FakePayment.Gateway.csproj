@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Bmb.Payment.Core\Bmb.Payment.Core.csproj" />
+      <ProjectReference Include="..\Bmb.Payment.Domain\Bmb.Payment.Domain.csproj" />
     </ItemGroup>
 
 </Project>

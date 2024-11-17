@@ -1,5 +1,5 @@
 using Bmb.Domain.Core.Events.Integration;
-using Bmb.Payment.Core;
+using Bmb.Payment.Domain;
 
 namespace Bmb.Payment.Masstransit;
 

@@ -1,7 +1,7 @@
 using Bmb.Domain.Core.Base;
-using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Controllers;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 using Bmb.Payment.FakePayment.Gateway;
 using Bmb.Payment.MercadoPago.Gateway;
 using Bmb.Payment.MercadoPago.Gateway.Configuration;

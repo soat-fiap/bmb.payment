@@ -1,14 +1,15 @@
 using System.Diagnostics.CodeAnalysis;
 using Bmb.Domain.Core.ValueObjects;
-using Bmb.Payment.Core;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain;
+using Bmb.Payment.Domain.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 using Bmb.Payment.MercadoPago.Gateway.Configuration;
 using MercadoPago.Client;
 using MercadoPago.Client.Common;
 using MercadoPago.Client.Payment;
 using Microsoft.Extensions.Logging;
-using DomainPayment = Bmb.Domain.Core.Entities.Payment;
-using DomainPaymentStatus = Bmb.Domain.Core.ValueObjects.PaymentStatus;
+using DomainPayment = Bmb.Payment.Domain.Entities.Payment;
+using DomainPaymentStatus = Bmb.Payment.Domain.ValueObjects.PaymentStatus;
 
 namespace Bmb.Payment.MercadoPago.Gateway;
 

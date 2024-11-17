@@ -1,4 +1,4 @@
-using Bmb.Domain.Core.ValueObjects;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.Controllers.Dto;
 

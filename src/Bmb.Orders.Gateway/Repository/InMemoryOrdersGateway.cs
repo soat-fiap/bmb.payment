@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Bmb.Domain.Core.ValueObjects;
-using Bmb.Payment.Core;
+using Bmb.Payment.Domain;
 
 namespace Bmb.Orders.Gateway.Repository;
 

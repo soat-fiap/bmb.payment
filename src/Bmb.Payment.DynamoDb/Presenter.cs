@@ -1,11 +1,12 @@
 using Amazon.DynamoDBv2.Model;
 using Bmb.Domain.Core.ValueObjects;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.DynamoDb;
 
 public static class Presenter
 {
-    internal static Dictionary<string, AttributeValue> ToDynamoDbItem(this Domain.Core.Entities.Payment payment)
+    internal static Dictionary<string, AttributeValue> ToDynamoDbItem(this Domain.Entities.Payment payment)
     {
         return new Dictionary<string, AttributeValue>
         {
@@ -21,9 +22,9 @@ public static class Presenter
         };
     }
 
-    internal static Domain.Core.Entities.Payment ToDomain(this Dictionary<string, AttributeValue> item)
+    internal static Domain.Entities.Payment ToDomain(this Dictionary<string, AttributeValue> item)
     {
-        return new Domain.Core.Entities.Payment
+        return new Domain.Entities.Payment
         {
             Id = new PaymentId(Guid.Parse(item["Id"].S)),
             Status = Enum.Parse<PaymentStatus>(item["Status"].S),

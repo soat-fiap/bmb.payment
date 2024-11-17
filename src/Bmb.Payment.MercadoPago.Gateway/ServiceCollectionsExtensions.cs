@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Bmb.Domain.Core.ValueObjects;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 using Bmb.Payment.MercadoPago.Gateway.Configuration;
 using Bmb.Payment.MercadoPago.Gateway.Security;
 using Microsoft.Extensions.Configuration;

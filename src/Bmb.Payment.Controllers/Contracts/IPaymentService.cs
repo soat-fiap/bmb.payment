@@ -1,5 +1,5 @@
-using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Controllers.Dto;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.Controllers.Contracts;
 

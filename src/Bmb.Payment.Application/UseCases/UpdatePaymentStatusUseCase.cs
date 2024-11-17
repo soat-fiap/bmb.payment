@@ -1,7 +1,7 @@
 using Bmb.Domain.Core.Events;
 using Bmb.Domain.Core.Events.Notifications;
-using Bmb.Domain.Core.ValueObjects;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.Application.UseCases;
 
@@ -16,7 +16,7 @@ public class UpdatePaymentStatusUseCase : IUpdatePaymentStatusUseCase
         _dispatcher = dispatcher;
     }
 
-    public async Task<bool> Execute(Bmb.Domain.Core.Entities.Payment? payment, PaymentStatus status)
+    public async Task<bool> Execute(Domain.Entities.Payment? payment, PaymentStatus status)
     {
         if (payment is not null && payment.Status
                 is not PaymentStatus.Approved

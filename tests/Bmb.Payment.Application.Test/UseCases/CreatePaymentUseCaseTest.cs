@@ -3,8 +3,9 @@ using Bmb.Domain.Core.Base;
 using Bmb.Domain.Core.Events;
 using Bmb.Domain.Core.Events.Notifications;
 using Bmb.Payment.Application.UseCases;
-using Bmb.Payment.Core;
-using Bmb.Payment.Core.Contracts;
+using Bmb.Payment.Domain;
+using Bmb.Payment.Domain.Contracts;
+using Bmb.Payment.Domain.ValueObjects;
 
 namespace Bmb.Payment.Application.Test.UseCases;
 
@@ -38,7 +39,7 @@ public class CreatePaymentUseCaseTest
             .Without(o => o.PaymentId)
             .Create();
 
-        var expectedPayment = fixture.Build<Bmb.Domain.Core.Entities.Payment>()
+        var expectedPayment = fixture.Build<Domain.Entities.Payment>()
             .With(p => p.Id, new PaymentId(Guid.NewGuid()))
             .With(p => p.Status, PaymentStatus.Pending)
             .Create();

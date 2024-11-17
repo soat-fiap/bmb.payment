@@ -1,9 +1,9 @@
 using AutoFixture;
-using Bmb.Domain.Core.ValueObjects;
 using Bmb.Payment.Api.Controllers;
 using Bmb.Payment.Controllers;
 using Bmb.Payment.Controllers.Contracts;
 using Bmb.Payment.Controllers.Dto;
+using Bmb.Payment.Domain.ValueObjects;
 using Bmb.Payment.MercadoPago.Gateway.Model;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -42,7 +42,7 @@ public class NotificationsControllerTest
     public async Task PostMercadoPago_PaymentEvent_Processed()
     {
         // Arrange
-        var payment = new Fixture().Create<Domain.Core.Entities.Payment>();
+        var payment = new Fixture().Create<Domain.Entities.Payment>();
         var @event = new Fixture().Build<MercadoPagoWebhookEvent>()
             .With(e => e.Action, "payment.updated")
             .With(e => e.Data, new MercadoPagoWebhookData
@@ -117,7 +117,7 @@ public class NotificationsControllerTest
     {
         // Arrange
         var paymentExternalReference = Guid.NewGuid().ToString();
-        var payment = new Fixture().Create<Domain.Core.Entities.Payment>();
+        var payment = new Fixture().Create<Domain.Entities.Payment>();
         _mockPaymentService.Setup(s => s.GetPaymentAsync(It.IsAny<string>(), It.IsAny<PaymentType>()))
             .ReturnsAsync(payment.FromEntityToDto())
             .Verifiable();
