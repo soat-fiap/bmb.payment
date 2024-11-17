@@ -66,3 +66,6 @@ To run the application in a Docker container:
 ```sh
 curl -X POST "https://yourapiurl/api/payments" -H "accept: application/json" -H "Content-Type: application/json" -d "{ \"amount\": 100.0, \"currency\": \"USD\", \"paymentMethod\": \"CreditCard\" }"
 ```
+  ## This repo on the infrastructure
+  
+  ![Architecture Diagram](aws-infra-phase-4.png)
