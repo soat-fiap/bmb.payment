@@ -15,7 +15,8 @@ RUN dotnet restore src/Bmb.Payment.Api
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "src/Bmb.Payment.Api/Bmb.Payment.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+ARG API_VERSION
+RUN dotnet publish "src/Bmb.Payment.Api/Bmb.Payment.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false /p:Version=$API_VERSION
 
 
 FROM base AS final
