@@ -167,6 +167,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          build-args: |
+            API_VERSION=${{ steps.sanitize-version.outputs.version }}
           file: ./src/Bmb.Payment.Api/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}

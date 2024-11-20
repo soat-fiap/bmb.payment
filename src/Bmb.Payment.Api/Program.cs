@@ -23,6 +23,7 @@ public class Program
         ILogger<Program>? logger = null;
         try
         {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
             builder.Host.UseSerilog((context, configuration) =>
                 configuration
                     .MinimumLevel.Debug()
@@ -55,9 +56,9 @@ public class Program
             builder.Services.AddSwaggerGen();
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
+                c.SwaggerDoc($"v{version.Major}", new OpenApiInfo
                 {
-                    Title = "BMB Payment API", Version = "v1", Extensions =
+                    Title = "BMB Payment API", Version = $"v{version.Major}.{version.Minor}.{version.Build}", Extensions =
                     {
                         {
                             "x-logo",
@@ -108,7 +109,11 @@ public class Program
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(options =>
+                {
+                    var version = Assembly.GetExecutingAssembly().GetName().Version.Major;
+                    options.SwaggerEndpoint($"/swagger/v{version}/swagger.yaml", $"v{version}");
+                });
             }
 
             app.UseSerilogRequestLogging();
