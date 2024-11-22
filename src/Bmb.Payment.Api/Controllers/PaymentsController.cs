@@ -1,7 +1,7 @@
-using Bmb.Auth;
 using Bmb.Payment.Api.Model;
 using Bmb.Payment.Controllers.Contracts;
 using Bmb.Payment.Controllers.Dto;
+using Bmb.Tools.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
