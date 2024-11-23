@@ -63,9 +63,21 @@ To run the application in a Docker container:
 
 ### Example Request
 
+### Prerequisites
+- Docker with Minikube configured
+- [webhook.site](https://webhook.site) token
+
+#### To forward mercado pago webhook notifications to host
+```bash
+whcli forward --token=f513d4a6-4dbd-4e32-93f5-b35376f33c89 --target=http://localhost/api/notifications/mercadopago
+```
+
 ```sh
 curl -X POST "https://yourapiurl/api/payments" -H "accept: application/json" -H "Content-Type: application/json" -d "{ \"amount\": 100.0, \"currency\": \"USD\", \"paymentMethod\": \"CreditCard\" }"
 ```
   ## This repo on the infrastructure
   
-  ![Architecture Diagram](aws-infra-phase-4.png)
+  ![Architecture Diagram](doc/aws-infra-phase-4.png)
+
+  ### K8S
+  ![Architecture Diagram](doc/k8s.png)
