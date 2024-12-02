@@ -8,9 +8,15 @@ This project, `bmb.payment`, is the payment microservice for a fast food applica
 ## Features
 
 - **Payment Creation**: Easily create payments through a simple API.
-- **Payment Integration**: Integrates with multiple payment service providers.
+- **Payment Integration**: Integrates with MercadoPago payment service provider.
 - **Payment Notifications**: Receives and processes payment status notifications.
 - **Microservice Communication**: Uses MassTransit for messaging between domain microservices.
+
+### Database
+It uses DynamoDB as database to store payment information, taking advanatge on nosql databases so onboarding new payment providers will need less overthinking due to its schema flexibility.
+
+### Masstransit
+It uses Masstransit to manage communication between services. Masstransit automatically creates Topics, Queues and Subscriptions.
 
 ## Getting Started
 
